@@ -718,12 +718,58 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         @media (max-width: 768px) {
-            .sidebar { position: fixed; left: -100%; width: 260px; }
-            .sidebar.mobile-open { left: 0; }
-            .search-bar { display: none; }
-            .page-content { padding: 20px; }
-            .stats-grid { grid-template-columns: 1fr; }
-            .topbar { padding: 0 20px; }
+            .sidebar { 
+                position: fixed !important; 
+                top: 0; 
+                bottom: 0; 
+                left: -300px !important; 
+                width: 260px !important; 
+                z-index: 9999 !important;
+                transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5) !important;
+            }
+            .sidebar.mobile-open { 
+                left: 0 !important; 
+            }
+            .sidebar.collapsed {
+                width: 260px !important;
+            }
+            #sidebar-backdrop {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.65);
+                backdrop-filter: blur(3px);
+                z-index: 9998;
+            }
+            #sidebar-backdrop.show {
+                display: block !important;
+            }
+            .search-bar { display: none !important; }
+            .page-content { padding: 16px !important; }
+            .stats-grid { grid-template-columns: 1fr !important; }
+            .topbar { padding: 0 16px !important; height: 64px !important; }
+            .section-header {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 12px !important;
+            }
+            .section-header > div:last-child {
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .section-header > div:last-child button,
+            .section-header > div:last-child a {
+                flex: 1;
+                justify-content: center;
+                text-align: center;
+            }
+            .modal-card {
+                min-width: 90% !important;
+                margin: 0 16px !important;
+            }
         }
     </style>
 </head>
@@ -747,6 +793,8 @@
     </div>
 
     <div class="app-container">
+        <!-- Sidebar Backdrop untuk Mobile -->
+        <div id="sidebar-backdrop" onclick="toggleSidebar()"></div>
         
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
@@ -920,10 +968,29 @@
             // Fetch Realtime Notifications
             fetchNotifications();
             setInterval(fetchNotifications, 15000);
+
+            window.addEventListener("resize", () => {
+                if (window.innerWidth > 768) {
+                    const sidebar = document.getElementById("sidebar");
+                    const backdrop = document.getElementById("sidebar-backdrop");
+                    if (sidebar) sidebar.classList.remove("mobile-open");
+                    if (backdrop) backdrop.classList.remove("show");
+                }
+            });
         });
 
         function toggleSidebar() {
-            document.getElementById("sidebar").classList.toggle("collapsed");
+            const sidebar = document.getElementById("sidebar");
+            const backdrop = document.getElementById("sidebar-backdrop");
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle("mobile-open");
+                sidebar.classList.remove("collapsed");
+                if (backdrop) backdrop.classList.toggle("show");
+            } else {
+                sidebar.classList.toggle("collapsed");
+                sidebar.classList.remove("mobile-open");
+                if (backdrop) backdrop.classList.remove("show");
+            }
             if (window.lucide) lucide.createIcons();
         }
 
