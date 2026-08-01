@@ -76,10 +76,10 @@ class AnggaranController extends Controller
             $desa->update(['modal_awal' => $request->modal_awal]);
             ActivityLog::log(
                 'Update Modal Awal',
-                'Mengatur modal awal 17 Agustus Desa ' . $desa->nama_desa . ' menjadi Rp ' . number_format($request->modal_awal, 0, ',', '.')
+                'Mengatur modal awal operasional Unit/Instansi ' . $desa->nama_desa . ' menjadi Rp ' . number_format($request->modal_awal, 0, ',', '.')
             );
         }
 
-        return redirect()->route('anggaran.index')->with('success', 'Modal Awal HUT RI ke-79 berhasil diperbarui!');
+        return redirect()->route('anggaran.index')->with('success', 'Modal Awal / Kas Dasar kegiatan berhasil diperbarui!');
     }
 }

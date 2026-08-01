@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
         // 3. Create 15 Acaras / Event
         if (Acara::count() === 0) {
             $acarasData = [
-                ['nama_acara' => 'Perayaan HUT RI ke-79 & Lomba Warga', 'desa_index' => 0, 'anggaran' => 75000000, 'status' => 'ongoing', 'tgl' => '2026-08-17 08:00:00'],
+                ['nama_acara' => 'Pesta Rakyat & Festival Kegiatan', 'desa_index' => 0, 'anggaran' => 75000000, 'status' => 'ongoing', 'tgl' => '2026-08-17 08:00:00'],
                 ['nama_acara' => 'Musyawarah Pembangunan Desa', 'desa_index' => 1, 'anggaran' => 25000000, 'status' => 'planned', 'tgl' => '2026-08-20 09:00:00'],
                 ['nama_acara' => 'Pelatihan UMKM Digital', 'desa_index' => 2, 'anggaran' => 35000000, 'status' => 'completed', 'tgl' => '2026-07-10 08:30:00'],
                 ['nama_acara' => 'Turnamen Sepak Bola Desa', 'desa_index' => 0, 'anggaran' => 40000000, 'status' => 'planned', 'tgl' => '2026-09-01 15:00:00'],
@@ -107,7 +107,7 @@ class DatabaseSeeder extends Seeder
                 ['acara_idx' => 0, 'tipe' => 'pemasukan', 'jumlah' => 25000000, 'ket' => 'PT. Indofood Sukses (Sponsorship Utama)'],
                 ['acara_idx' => 0, 'tipe' => 'pemasukan', 'jumlah' => 12500000, 'ket' => 'Iuran Warga RT 01 - RT 05 (Kolektif)'],
                 ['acara_idx' => 0, 'tipe' => 'pemasukan', 'jumlah' => 5000000, 'ket' => 'Hamba Allah (Donasi Pribadi)'],
-                ['acara_idx' => 0, 'tipe' => 'pengeluaran', 'jumlah' => 15000000, 'ket' => 'Sewa Panggung & Lighting HUT RI'],
+                ['acara_idx' => 0, 'tipe' => 'pengeluaran', 'jumlah' => 15000000, 'ket' => 'Sewa Panggung & Lighting Acara'],
                 ['acara_idx' => 0, 'tipe' => 'pengeluaran', 'jumlah' => 8500000, 'ket' => 'Hadiah Lomba & Trofi Juara'],
                 ['acara_idx' => 2, 'tipe' => 'pemasukan', 'jumlah' => 35000000, 'ket' => 'Alokasi Dana Swadaya'],
                 ['acara_idx' => 2, 'tipe' => 'pengeluaran', 'jumlah' => 12000000, 'ket' => 'Konsumsi & Akomodasi Peserta'],
@@ -139,7 +139,7 @@ class DatabaseSeeder extends Seeder
         // 6. Seed Panitia (Struktur Panitia Inti)
         if (Panitia::count() === 0) {
             $desaId = $desas[0]->id ?? 1;
-            Panitia::create(['desa_id' => $desaId, 'nama' => 'Andi Nugroho', 'jabatan' => 'Ketua Panitia', 'divisi' => 'Pimpinan Inti', 'keterangan' => 'Koordinator Umum HUT RI ke-79', 'status' => 'Aktif', 'avatar' => 'AN', 'phone' => '081234111222']);
+            Panitia::create(['desa_id' => $desaId, 'nama' => 'Andi Nugroho', 'jabatan' => 'Ketua Panitia', 'divisi' => 'Pimpinan Inti', 'keterangan' => 'Koordinator Umum / Ketua Pelaksana', 'status' => 'Aktif', 'avatar' => 'AN', 'phone' => '081234111222']);
             Panitia::create(['desa_id' => $desaId, 'nama' => 'Siti Aminah', 'jabatan' => 'Wakil Ketua', 'divisi' => 'Pimpinan Inti', 'keterangan' => 'Pengawas Lapangan & Lomba', 'status' => 'Aktif', 'avatar' => 'SA', 'phone' => '081234222333']);
             Panitia::create(['desa_id' => $desaId, 'nama' => 'Rina Wati', 'jabatan' => 'Sekretaris', 'divisi' => 'Kesekretariatan', 'keterangan' => 'Administrasi & Proposal', 'status' => 'Aktif', 'avatar' => 'RW', 'phone' => '081234333444']);
             Panitia::create(['desa_id' => $desaId, 'nama' => 'Budi Santoso', 'jabatan' => 'Bendahara Utama', 'divisi' => 'Keuangan', 'keterangan' => 'Pengelola Kas & Pembukuan', 'status' => 'Aktif', 'avatar' => 'BS', 'phone' => '081234444555']);
@@ -160,11 +160,11 @@ class DatabaseSeeder extends Seeder
         // 8. Seed Dokumen & Laporan
         if (Dokumen::count() === 0) {
             $desaId = $desas[0]->id ?? 1;
-            Dokumen::create(['desa_id' => $desaId, 'nama_dokumen' => 'Proposal Resmi HUT RI ke-79.pdf', 'kategori' => 'Proposal', 'tipe_file' => 'PDF', 'ukuran_file' => '2.4 MB', 'status' => 'Approved']);
-            Dokumen::create(['desa_id' => $desaId, 'nama_dokumen' => 'RAB Lengkap Perayaan HUT RI.xlsx', 'kategori' => 'Laporan Keuangan', 'tipe_file' => 'XLSX', 'ukuran_file' => '1.1 MB', 'status' => 'Approved']);
+            Dokumen::create(['desa_id' => $desaId, 'nama_dokumen' => 'Proposal Resmi Kegiatan & Event.pdf', 'kategori' => 'Proposal', 'tipe_file' => 'PDF', 'ukuran_file' => '2.4 MB', 'status' => 'Approved']);
+            Dokumen::create(['desa_id' => $desaId, 'nama_dokumen' => 'RAB Lengkap Operasional Kegiatan.xlsx', 'kategori' => 'Laporan Keuangan', 'tipe_file' => 'XLSX', 'ukuran_file' => '1.1 MB', 'status' => 'Approved']);
             Dokumen::create(['desa_id' => $desaId, 'nama_dokumen' => 'Surat Izin Keramaian Polsek.pdf', 'kategori' => 'Surat Izin', 'tipe_file' => 'PDF', 'ukuran_file' => '0.8 MB', 'status' => 'Approved']);
             Dokumen::create(['desa_id' => $desaId, 'nama_dokumen' => 'Laporan Pertanggungjawaban (LPJ) Sementara.docx', 'kategori' => 'LPJ', 'tipe_file' => 'DOCX', 'ukuran_file' => '1.7 MB', 'status' => 'Revision']);
-            Dokumen::create(['desa_id' => $desaId, 'nama_dokumen' => 'Surat Undangan Ketua RT 01 - RT 05.pdf', 'kategori' => 'Surat Izin', 'tipe_file' => 'PDF', 'ukuran_file' => '0.5 MB', 'status' => 'Approved']);
+            Dokumen::create(['desa_id' => $desaId, 'nama_dokumen' => 'Surat Undangan Pimpinan.pdf', 'kategori' => 'Surat Izin', 'tipe_file' => 'PDF', 'ukuran_file' => '0.5 MB', 'status' => 'Approved']);
         }
     }
 }

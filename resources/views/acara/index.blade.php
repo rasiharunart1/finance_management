@@ -2,7 +2,7 @@
     <div class="page-header">
         <div class="page-title">
             <h1>Data Nama Acara (Event)</h1>
-            <p>Kelola seluruh agenda acara, relasi ke desa, serta pengawasan anggaran bendahara.</p>
+            <p>Kelola seluruh agenda acara & kegiatan, relasi ke unit/instansi (desa/sekolah/organisasi), serta pengawasan anggaran operasional.</p>
         </div>
         <button type="button" class="btn-primary" onclick="openModal('modal-tambah-acara')">
             <i class="fa-solid fa-plus"></i>
@@ -15,7 +15,7 @@
         <form action="{{ route('acara.index') }}" method="GET" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
             <div style="flex: 1; min-width: 220px;">
                 <select name="desa_id" class="form-select" onchange="this.form.submit()">
-                    <option value="">-- Semua Desa Penyelenggara --</option>
+                    <option value="">-- Semua Unit / Instansi --</option>
                     @foreach($desas as $d)
                         <option value="{{ $d->id }}" {{ $desaId == $d->id ? 'selected' : '' }}>{{ $d->nama_desa }}</option>
                     @endforeach
@@ -45,7 +45,7 @@
                 <thead>
                     <tr>
                         <th>Nama Acara</th>
-                        <th>Desa Terkait</th>
+                        <th>Unit / Instansi Terkait</th>
                         <th>Waktu Pelaksanaan</th>
                         <th>Anggaran Rencana</th>
                         <th>Realisasi Bendahara</th>
@@ -131,7 +131,7 @@
                         <input type="text" name="nama_acara" class="form-input" placeholder="Contoh: Gebyar Seni Budaya" required value="{{ old('nama_acara') }}">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Pilih Desa Penyelenggara</label>
+                        <label class="form-label">Pilih Unit / Instansi Penyelenggara</label>
                         <select name="desa_id" class="form-select" required>
                             @foreach($desas as $d)
                                 <option value="{{ $d->id }}">{{ $d->nama_desa }}</option>
@@ -144,7 +144,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Lokasi Kegiatan</label>
-                        <input type="text" name="lokasi" class="form-input" placeholder="Balai Desa / Alun-alun" value="{{ old('lokasi') }}">
+                        <input type="text" name="lokasi" class="form-input" placeholder="Gedung / Aula / Lapangan" value="{{ old('lokasi') }}">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Rencana Anggaran (Rp)</label>
@@ -188,7 +188,7 @@
                         <input type="text" name="nama_acara" id="edit_nama_acara" class="form-input" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Pilih Desa Penyelenggara</label>
+                        <label class="form-label">Pilih Unit / Instansi Penyelenggara</label>
                         <select name="desa_id" id="edit_desa_id" class="form-select" required>
                             @foreach($desas as $d)
                                 <option value="{{ $d->id }}">{{ $d->nama_desa }}</option>

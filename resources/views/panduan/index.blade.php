@@ -3,7 +3,7 @@
     <div class="page-header">
         <div class="page-title">
             <h1>Panduan & Manual Pengguna Pemula</h1>
-            <p>Petunjuk interaktif langkah demi langkah mengelola kas, anggaran, sponsor, dan laporan HUT RI ke-79.</p>
+            <p>Petunjuk interaktif langkah demi langkah mengelola kas, anggaran, sponsor, dan laporan berbagai jenis kegiatan (Desa, Sekolah, Kampus, Organisasi & Event).</p>
         </div>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
             <button type="button" onclick="window.print()" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
@@ -20,14 +20,14 @@
         </span>
         <a href="#sec-role" class="btn-secondary" style="font-size: 12px; padding: 6px 12px; text-decoration: none;">1. Konsep & Peran</a>
         <a href="#sec-modal-awal" class="btn-secondary" style="font-size: 12px; padding: 6px 12px; text-decoration: none;">2. Modal Awal</a>
-        <a href="#sec-rab" class="btn-secondary" style="font-size: 12px; padding: 6px 12px; text-decoration: none;">3. RAB & Lomba</a>
+        <a href="#sec-rab" class="btn-secondary" style="font-size: 12px; padding: 6px 12px; text-decoration: none;">3. RAB & Agenda</a>
         <a href="#sec-kas-struk" class="btn-secondary" style="font-size: 12px; padding: 6px 12px; text-decoration: none;">4. Kas & Bukti Struk</a>
         <a href="#sec-sponsor" class="btn-secondary" style="font-size: 12px; padding: 6px 12px; text-decoration: none;">5. Sponsor & Cairkan</a>
         <a href="#sec-export" class="btn-secondary" style="font-size: 12px; padding: 6px 12px; text-decoration: none;">6. Export PDF & Excel</a>
         <a href="#sec-faq" class="btn-secondary" style="font-size: 12px; padding: 6px 12px; text-decoration: none;">7. Tanya Jawab (FAQ)</a>
     </div>
 
-    <!-- SECTION 1: ROLE & KONSEP -->
+    <!-- SECTION 1: ROLE & KONCEP -->
     <div id="sec-role" class="glass" style="padding: 28px; margin-bottom: 28px;">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
             <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(220, 38, 38, 0.12); color: var(--primary-red); display: flex; align-items: center; justify-content: center;">
@@ -35,18 +35,18 @@
             </div>
             <div>
                 <h2 style="font-size: 18px; font-weight: 800; color: var(--text-primary);">1. Konsep Sistem & Hak Akses Peran (Role)</h2>
-                <p style="font-size: 13px; color: var(--text-secondary);">Sistem ini memisahkan kendali agar data keuangan setiap desa aman dan terfokus.</p>
+                <p style="font-size: 13px; color: var(--text-secondary);">Sistem ini memisahkan kendali agar data keuangan setiap unit/instansi aman dan terfokus.</p>
             </div>
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
             <div style="padding: 20px; border-radius: var(--radius-md); background: var(--surface-color); border: 1px solid rgba(255,255,255,0.06); box-shadow: var(--shadow-inset);">
                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-                    <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: var(--success); font-size: 12px;">Bendahara Desa (hasOne)</span>
+                    <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: var(--success); font-size: 12px;">Bendahara Unit / Instansi (hasOne)</span>
                 </div>
-                <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 8px;">Pengelola Utama Kas Desa</h3>
+                <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 8px;">Pengelola Kas Unit / Desa / Sekolah</h3>
                 <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-                    Sebagai Bendahara, akun Anda <strong>secara eksklusif terhubung dengan 1 desa penugasan</strong>. Anda bertugas mengatur <strong>Modal Awal 17 Agustus</strong>, menyusun anggaran lomba, mencatat pemasukan & pengeluaran kas, serta mengunggah foto bukti struk belanja desa Anda.
+                    Sebagai Bendahara, akun Anda <strong>terhubung dengan 1 unit/instansi penugasan</strong>. Anda bertugas mengatur <strong>Modal Awal Kegiatan</strong>, menyusun anggaran agenda/acara, mencatat pemasukan & pengeluaran kas, serta mengunggah foto bukti struk belanja.
                 </p>
             </div>
 
@@ -54,9 +54,9 @@
                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
                     <span class="badge" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; font-size: 12px;">Superadmin (hasMany)</span>
                 </div>
-                <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 8px;">Pengawas Seluruh Desa & User</h3>
+                <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 8px;">Pengawas Seluruh Unit & User</h3>
                 <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-                    Superadmin adalah koordinator tingkat kecamatan/kabupaten yang dapat memantau data kas dari <strong>banyak desa sekaligus</strong>. Superadmin juga memiliki menu eksklusif <strong>Data Nama Desa</strong> dan <strong>Manajemen User</strong> untuk menetapkan desa bagi akun bendahara baru.
+                    Superadmin adalah koordinator yang dapat memantau data kas dari <strong>banyak unit/instansi sekaligus</strong>. Superadmin memiliki menu eksklusif <strong>Unit / Instansi (Desa/Sekolah)</strong> dan <strong>Manajemen User</strong> untuk menetapkan penugasan akun bendahara.
                 </p>
             </div>
         </div>
@@ -69,7 +69,7 @@
                 <i data-lucide="wallet" style="width: 24px;"></i>
             </div>
             <div>
-                <h2 style="font-size: 18px; font-weight: 800; color: var(--text-primary);">2. Langkah Pertama: Mengatur Modal Awal 17 Agustus</h2>
+                <h2 style="font-size: 18px; font-weight: 800; color: var(--text-primary);">2. Langkah Pertama: Mengatur Modal Awal Kegiatan</h2>
                 <p style="font-size: 13px; color: var(--text-secondary);">Modal awal adalah dasar saldo kas sebelum dikurangi atau ditambah transaksi lainnya.</p>
             </div>
         </div>
@@ -83,35 +83,35 @@
             <div style="padding: 16px; border-radius: var(--radius-md); background: var(--surface-color);">
                 <div style="font-size: 12px; font-weight: 700; color: var(--primary-red); margin-bottom: 6px;">LANGKAH 2</div>
                 <div style="font-size: 14px; font-weight: 700; margin-bottom: 6px;">Tekan Tombol Modal Awal</div>
-                <p style="font-size: 12px; color: var(--text-secondary);">Di bagian atas halaman, klik tombol <strong>"Atur Modal Awal 17 Agustus"</strong> untuk memunculkan form popup.</p>
+                <p style="font-size: 12px; color: var(--text-secondary);">Di bagian atas halaman, klik tombol <strong>"Atur Modal Awal"</strong> untuk memunculkan form popup.</p>
             </div>
             <div style="padding: 16px; border-radius: var(--radius-md); background: var(--surface-color);">
                 <div style="font-size: 12px; font-weight: 700; color: var(--primary-red); margin-bottom: 6px;">LANGKAH 3</div>
                 <div style="font-size: 14px; font-weight: 700; margin-bottom: 6px;">Simpan Nominal Modal</div>
-                <p style="font-size: 12px; color: var(--text-secondary);">Ketikkan angka modal awal (contoh: <code>25000000</code> tanpa titik) dan klik Simpan. Saldo Kas Anda langsung aktif!</p>
+                <p style="font-size: 12px; color: var(--text-secondary);">Masukkan angka nominal (tanpa titik atau koma, mis: 15000000) dan klik <strong>Simpan</strong>.</p>
             </div>
         </div>
     </div>
 
-    <!-- SECTION 3: RAB & LOMBA -->
+    <!-- SECTION 3: RAB & AGENDA -->
     <div id="sec-rab" class="glass" style="padding: 28px; margin-bottom: 28px;">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
             <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(245, 158, 11, 0.12); color: var(--warning); display: flex; align-items: center; justify-content: center;">
                 <i data-lucide="pie-chart" style="width: 24px;"></i>
             </div>
             <div>
-                <h2 style="font-size: 18px; font-weight: 800; color: var(--text-primary);">3. Membuat Daftar Lomba & Anggaran (RAB)</h2>
-                <p style="font-size: 13px; color: var(--text-secondary);">Pantau batas biaya maksimal per kegiatan lomba agar pengeluaran terkendali.</p>
+                <h2 style="font-size: 18px; font-weight: 800; color: var(--text-primary);">3. Membuat Daftar Agenda & Anggaran (RAB)</h2>
+                <p style="font-size: 13px; color: var(--text-secondary);">Pantau batas biaya maksimal per agenda kegiatan agar pengeluaran terkendali.</p>
             </div>
         </div>
 
         <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px;">
-            Di menu <strong>Anggaran (RAB)</strong>, Anda dapat menekan tombol <strong>"Tambah Lomba / Anggaran"</strong>. Masukkan nama kegiatan (mis. <em>Lomba Panjat Pinang</em>), tanggal, dan Rencana Anggaran Biaya (RAB).
+            Di menu <strong>Anggaran (RAB)</strong>, Anda dapat menekan tombol <strong>"Tambah Agenda & Anggaran"</strong>. Masukkan nama kegiatan (mis. <em>Seminar / Turnamen / Pentas Seni</em>), tanggal, dan Rencana Anggaran Biaya (RAB).
         </p>
         <div style="padding: 16px; border-left: 4px solid var(--warning); background: rgba(245, 158, 11, 0.08); border-radius: 0 var(--radius-md) var(--radius-md) 0;">
             <strong style="font-size: 13px; color: var(--text-primary);">💡 Info Progress Bar Otomatis:</strong>
             <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">
-                Setiap kali Anda mencatat pengeluaran kas pada suatu lomba, sistem secara otomatis menghitung persentase penyerapan dana dan mengubah warna <em>progress bar</em> (Hijau -> Kuning -> Merah) jika mendekati batas anggaran.
+                Setiap kali Anda mencatat pengeluaran kas pada suatu agenda, sistem secara otomatis menghitung persentase penyerapan dana dan mengubah warna <em>progress bar</em> (Hijau -> Kuning -> Merah) jika mendekati batas anggaran.
             </p>
         </div>
     </div>
@@ -210,7 +210,7 @@
                     <i data-lucide="printer" style="width: 18px; display: inline; margin-right: 4px;"></i> Tombol [🖨️ Cetak / PDF]
                 </div>
                 <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-                    Membuka dokumen formal yang dilengkapi <strong>Kop Surat Resmi Panitia HUT RI ke-79 & NH Financial Event Management</strong>, 4 kartu ringkasan keuangan, tabel rincian transaksi, dan <strong>Kolom Tanda Tangan Resmi (Ketua Panitia & Bendahara Kegiatan)</strong>. Siap dicetak atau disimpan langsung sebagai PDF!
+                    Membuka dokumen formal yang dilengkapi <strong>Kop Surat Resmi Panitia & NHMEDIA-FINANCE EVENT MANAGEMENT</strong>, 4 kartu ringkasan keuangan, tabel rincian transaksi, dan <strong>Kolom Tanda Tangan Resmi (Ketua Panitia & Bendahara Kegiatan)</strong>. Siap dicetak atau disimpan langsung sebagai PDF!
                 </p>
             </div>
 
@@ -219,7 +219,7 @@
                     <i data-lucide="file-spreadsheet" style="width: 18px; display: inline; margin-right: 4px;"></i> Tombol [📊 Export Excel]
                 </div>
                 <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-                    Mengunduh seluruh data transaksi dalam format file <code>.csv</code> (kompatibel penuh dengan Microsoft Excel & Google Sheets) yang dilengkapi nomor urut, tanggal, nama desa, kategori, serta nominal pemasukan & pengeluaran.
+                    Mengunduh seluruh data transaksi dalam format file <code>.csv</code> (kompatibel penuh dengan Microsoft Excel & Google Sheets) yang dilengkapi nomor urut, tanggal, nama unit/instansi, kategori, serta nominal pemasukan & pengeluaran.
                 </p>
             </div>
         </div>
@@ -240,19 +240,19 @@
         <div style="display: flex; flex-direction: column; gap: 14px;">
             <div style="padding: 16px; border-radius: var(--radius-md); background: var(--surface-color);">
                 <div style="font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--text-primary);">
-                    ❓ Apa bedanya "Modal Awal" dengan "Anggaran (RAB) Lomba"?
+                    ❓ Apa bedanya "Modal Awal" dengan "Anggaran (RAB) Kegiatan"?
                 </div>
                 <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-                    <strong>Modal Awal</strong> adalah uang kas nyata yang sudah dipegang bendahara sebelum acara dimulai. Sedangkan <strong>Anggaran (RAB) Lomba</strong> adalah batas target rencana pengeluaran yang dialokasikan untuk kegiatan tersebut.
+                    <strong>Modal Awal</strong> adalah uang kas nyata yang sudah dipegang bendahara sebelum kegiatan dimulai. Sedangkan <strong>Anggaran (RAB) Kegiatan</strong> adalah batas target rencana pengeluaran yang dialokasikan untuk kegiatan tersebut.
                 </p>
             </div>
 
             <div style="padding: 16px; border-radius: var(--radius-md); background: var(--surface-color);">
                 <div style="font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--text-primary);">
-                    ❓ Mengapa saya tidak melihat menu "Data Nama Desa" dan "Manajemen User"?
+                    ❓ Mengapa saya tidak melihat menu "Unit / Instansi" dan "Manajemen User"?
                 </div>
                 <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-                    Menu tersebut khusus untuk akun dengan peran <strong>Superadmin</strong>. Akun <strong>Admin Bendahara</strong> sengaja disederhanakan agar fokus pada pengelolaan kas desa penugasannya.
+                    Menu tersebut khusus untuk akun dengan peran <strong>Superadmin</strong>. Akun <strong>Admin Bendahara</strong> sengaja disederhanakan agar fokus pada pengelolaan kas unit/instansi penugasannya.
                 </p>
             </div>
 

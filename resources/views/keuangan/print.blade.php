@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Keuangan HUT RI ke-79 - NH Financial</title>
+    <title>Laporan Keuangan Kegiatan & Event - NHMEDIA-FINANCE</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -246,10 +246,10 @@
                 <i class="fa-solid fa-flag"></i>
             </div>
             <div class="kop-text">
-                <h1>PANITIA PERINGATAN HUT KEMERDEKAAN RI KE-79</h1>
-                <h2>SISTEM MANAJEMEN KEUANGAN BENDAHARA (NH FINANCIAL)</h2>
-                <p>Lingkup Wilayah: <strong>{{ $namaDesa }}</strong> | Rekapitulasi Arus Kas Kegiatan & Perlombaan</p>
-                <p style="font-size: 12px; color: #94a3b8;">Dicatak secara otomatis oleh sistem pada tanggal: {{ date('d F Y, H:i') }} WIB</p>
+                <h1>LAPORAN KEUANGAN & ANGGARAN KEGIATAN</h1>
+                <h2>NHMEDIA-FINANCE EVENT MANAGEMENT SYSTEM</h2>
+                <p>Unit / Instansi: <strong>{{ $namaDesa }}</strong> | Rekapitulasi Arus Kas & Rencana Anggaran Biaya (RAB)</p>
+                <p style="font-size: 12px; color: #94a3b8;">Dicetak secara otomatis oleh sistem pada tanggal: {{ date('d F Y, H:i') }} WIB</p>
             </div>
             <div class="logo-box" style="background: transparent; color: #e2e8f0; font-size: 28px;">
                 <i class="fa-solid fa-shield-halved"></i>
@@ -259,7 +259,7 @@
         <!-- EXECUTIVE SUMMARY CARDS -->
         <div class="summary-grid">
             <div class="summary-card">
-                <div class="summary-label">MODAL AWAL 17 AGUSTUS</div>
+                <div class="summary-label">MODAL AWAL / KAS DASAR</div>
                 <div class="summary-value" style="color: #475569;">
                     Rp {{ number_format($modalAwal, 0, ',', '.') }}
                 </div>
@@ -362,13 +362,13 @@
         <!-- SIGNATURE BLOCK -->
         <div class="signature-grid">
             <div class="signature-box">
-                <div class="title">Mengetahui & Menyetujui,<br>Ketua Panitia HUT RI ke-79</div>
+                <div class="title">Mengetahui & Menyetujui,<br>Ketua Pelaksana / Pimpinan</div>
                 <div class="space"></div>
                 <div class="name">( ............................................ )</div>
                 <div style="font-size: 12px; color: #64748b; margin-top: 4px;">Penanggung Jawab Acara & Anggaran</div>
             </div>
             <div class="signature-box">
-                <div class="title">Dibuat Oleh,<br>Bendahara Keuangan HUT RI</div>
+                <div class="title">Dibuat Oleh,<br>Bendahara / Bagian Keuangan</div>
                 <div class="space"></div>
                 <div class="name">{{ auth()->user()->name ?? '( ............................................ )' }}</div>
                 <div style="font-size: 12px; color: #64748b; margin-top: 4px;">{{ $namaDesa }}</div>

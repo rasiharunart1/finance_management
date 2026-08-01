@@ -23,9 +23,9 @@
     <!-- FINANCIAL SUMMARY CARDS -->
     <div class="stats-grid" style="margin-bottom: 24px;">
         <div class="stat-card glass">
-            <span class="stat-label">Modal Awal HUT RI ke-79</span>
+            <span class="stat-label">Modal Awal / Kas Dasar</span>
             <div class="stat-value" style="color: var(--text-primary);">Rp {{ number_format($modalAwal, 0, ',', '.') }}</div>
-            <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Modal dasar 17 Agustus</div>
+            <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Modal dasar operasional kegiatan</div>
         </div>
         <div class="stat-card glass">
             <span class="stat-label">(+) Pemasukan Tambahan</span>

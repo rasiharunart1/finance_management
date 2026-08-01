@@ -2,7 +2,7 @@
     <div class="section-header">
         <div class="section-title">
             <h2>Dashboard Utama</h2>
-            <p>Overview keuangan dan progres persiapan event HUT RI ke-79 & Desa Makmur.</p>
+            <p>Overview keuangan, progres anggaran, dan persentase kepanitiaan seluruh kegiatan & event.</p>
         </div>
         <div style="display: flex; gap: 12px;">
             <a href="{{ route('keuangan.index') }}" class="btn-secondary"><i data-lucide="download" style="width:16px;"></i> Semua Kas</a>
@@ -27,12 +27,12 @@
 
         <div class="stat-card glass">
             <div class="stat-header">
-                <span class="stat-label">Modal Awal HUT RI</span>
+                <span class="stat-label">Modal Awal / Kas Dasar</span>
                 <div class="stat-icon green"><i data-lucide="coins"></i></div>
             </div>
             <div class="stat-value">Rp {{ number_format($modalAwal, 0, ',', '.') }}</div>
             <div class="stat-trend trend-up">
-                Modal dasar perayaan 17 Agustus
+                Modal dasar operasional kegiatan & event
             </div>
         </div>
 
@@ -43,7 +43,7 @@
             </div>
             <div class="stat-value" style="color: var(--success);">Rp {{ number_format($totalPemasukan, 0, ',', '.') }}</div>
             <div class="stat-trend trend-up">
-                Sponsorship, Donasi & Iuran Warga
+                Sponsorship, Donasi, Iuran & Pemasukan Lainnya
             </div>
         </div>
 
@@ -54,7 +54,7 @@
             </div>
             <div class="stat-value" style="color: var(--primary-red);">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</div>
             <div class="stat-trend trend-up" style="color: var(--text-secondary);">
-                Realisasi seluruh lomba / acara
+                Realisasi seluruh agenda & acara
             </div>
         </div>
     </div>
@@ -64,7 +64,7 @@
         <div class="glass" style="padding: 24px; display: flex; flex-direction: column;">
             <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                 <div>
-                    <div style="font-size: 16px; font-weight: 700; color: var(--text-primary);">Tren Arus Kas HUT RI ke-79</div>
+                    <div style="font-size: 16px; font-weight: 700; color: var(--text-primary);">Tren Arus Kas Keseluruhan Event</div>
                     <div style="font-size: 12px; color: var(--text-secondary);">Visualisasi perbandingan tren Pemasukan vs Pengeluaran (Satuan Juta Rp)</div>
                 </div>
                 <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: var(--success); font-size: 11px;">
@@ -119,7 +119,7 @@
                 new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: {!! json_encode($trendLabels ?? ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4', '17 Agustus', 'Pasca Event']) !!},
+                        labels: {!! json_encode($trendLabels ?? ['Tahap 1', 'Tahap 2', 'Tahap 3', 'Tahap 4', 'Hari-H Event', 'Pasca Event']) !!},
                         datasets: [
                             {
                                 label: 'Pemasukan Kas (Juta Rp)',

@@ -2,7 +2,7 @@
     <div class="section-header">
         <div class="section-title">
             <h2>Struktur Panitia Inti</h2>
-            <p>Daftar panitia pelaksana HUT RI ke-79 & Manajemen Struktur Desa.</p>
+            <p>Daftar panitia pelaksana kegiatan & manajemen struktur kepanitiaan/organisasi.</p>
         </div>
         <button type="button" class="btn-primary" onclick="openModal('modal-add-panitia')">
             <i data-lucide="plus"></i> Tambah Panitia
@@ -160,7 +160,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Keterangan Tambahan</label>
-                        <input type="text" name="keterangan" class="form-input" placeholder="Contoh: Koordinator Umum HUT RI ke-79">
+                        <input type="text" name="keterangan" class="form-input" placeholder="Contoh: Koordinator Umum / Ketua Pelaksana / Penanggung Jawab">
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -163,7 +163,7 @@
                     @endif
                     <div class="form-group">
                         <label class="form-label">Nama Dokumen</label>
-                        <input type="text" name="nama_dokumen" class="form-input" required placeholder="Contoh: Proposal Resmi HUT RI ke-79.pdf">
+                        <input type="text" name="nama_dokumen" class="form-input" required placeholder="Contoh: Proposal Resmi Kegiatan & Event.pdf">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Kategori</label>

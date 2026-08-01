@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>NH FINANCIAL EVENT MANAGEMENT</title>
+    <title>NHMEDIA-FINANCE EVENT MANAGEMENT</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -803,7 +803,7 @@
                     <i data-lucide="flag"></i>
                 </div>
                 <div class="brand-text">
-                    <h1 style="font-size: 15px;">NH FINANCIAL</h1>
+                    <h1 style="font-size: 15px;">NHMEDIA-FINANCE</h1>
                     <p style="font-size: 11px;">EVENT MANAGEMENT</p>
                 </div>
             </a>
@@ -812,6 +812,9 @@
                 <div class="menu-group-title">Utama</div>
                 <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     <i data-lucide="layout-dashboard"></i> <span class="menu-text">Dashboard</span>
+                </a>
+                <a href="{{ route('acara.index') }}" class="nav-item {{ request()->routeIs('acara.*') || request()->routeIs('jadwal.*') ? 'active' : '' }}">
+                    <i data-lucide="calendar-check"></i> <span class="menu-text">Data Event & Acara</span>
                 </a>
                 <a href="{{ route('panduan.index') }}" class="nav-item {{ request()->routeIs('panduan.*') ? 'active' : '' }}">
                     <i data-lucide="book-open"></i> <span class="menu-text">Panduan Manual</span>
@@ -841,14 +844,11 @@
                 <a href="{{ route('dokumen.index') }}" class="nav-item {{ request()->routeIs('dokumen.*') ? 'active' : '' }}">
                     <i data-lucide="folder-open"></i> <span class="menu-text">Dokumen & Laporan</span>
                 </a>
-                <a href="{{ route('acara.index') }}" class="nav-item {{ request()->routeIs('acara.*') || request()->routeIs('jadwal.*') ? 'active' : '' }}">
-                    <i data-lucide="calendar"></i> <span class="menu-text">Jadwal Event (Acara)</span>
-                </a>
 
                 @if(auth()->user() && auth()->user()->isSuperadmin())
                 <div class="menu-group-title">Superadmin</div>
                 <a href="{{ route('desa.index') }}" class="nav-item {{ request()->routeIs('desa.*') ? 'active' : '' }}">
-                    <i data-lucide="map-pin"></i> <span class="menu-text">Data Nama Desa</span>
+                    <i data-lucide="building-2"></i> <span class="menu-text">Unit/Instansi (Desa/Sekolah)</span>
                 </a>
                 <a href="{{ route('user.index') }}" class="nav-item {{ request()->routeIs('user.*') ? 'active' : '' }}">
                     <i data-lucide="shield-check"></i> <span class="menu-text">Manajemen User</span>

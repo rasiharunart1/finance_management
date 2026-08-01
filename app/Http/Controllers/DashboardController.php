@@ -65,7 +65,7 @@ class DashboardController extends Controller
         $latestActivities = ActivityLog::with('user')->latest()->take(6)->get();
 
         // Trend Chart Data (Line Chart Pemasukan vs Pengeluaran)
-        $trendLabels = ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4', '17 Agustus', 'Pasca Event'];
+        $trendLabels = ['Tahap 1', 'Tahap 2', 'Tahap 3', 'Tahap 4', 'Hari-H Event', 'Pasca Event'];
         
         if ($totalPemasukan == 0 && $totalPengeluaran == 0) {
             $trendPemasukan = [0, 0, 0, 0, 0, 0];
