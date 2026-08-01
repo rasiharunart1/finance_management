@@ -106,8 +106,8 @@ php artisan key:generate --force
 # Tautkan direktori public/storage untuk foto Bukti Struk/Transfer
 php artisan storage:link
 
-# Jalankan migrasi database di production (opsional dengan --seed)
-php artisan migrate --force --seed
+# Jalankan migrasi database di production TANPA data dummy (menggunakan ProductionSeeder)
+php artisan migrate --force --seed --seeder=ProductionSeeder
 ```
 
 ### Langkah 4: Optimasi Caching Production
@@ -193,10 +193,10 @@ Bagi organisasi desa atau panitia yang menggunakan Shared Hosting standar:
      echo "Storage Linked Successfully!";
      ```
    - Buka `https://namadomainanda.com/link.php` sekali, lalu hapus file `link.php` demi keamanan.
-5. **Jalankan Migration & Seeder via Terminal cPanel**:
+5. **Jalankan Migration & Seeder via Terminal cPanel (Tanpa Data Dummy)**:
    ```bash
    cd /home/useranda/nhfinance
-   php artisan migrate --force --seed
+   php artisan migrate --force --seed --seeder=ProductionSeeder
    php artisan optimize
    ```
 

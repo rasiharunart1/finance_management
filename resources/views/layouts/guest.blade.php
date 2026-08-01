@@ -114,12 +114,14 @@
 
             {{ $slot }}
 
+            @if(app()->isLocal())
             <div class="demo-credentials">
-                <strong><i class="fa-solid fa-circle-info"></i> Demo Akun Tersedia:</strong>
+                <strong><i class="fa-solid fa-circle-info"></i> Demo Akun Tersedia (Mode Local):</strong>
                 <div>Superadmin: <span style="color:#fff;">superadmin@nhfinance.id</span></div>
                 <div>Bendahara: <span style="color:#fff;">bendahara@nhfinance.id</span></div>
                 <div style="margin-top:0.25rem;">Password: <span style="color:#10b981; font-weight:600;">password</span></div>
             </div>
+            @endif
 
             <div style="text-align: center; margin-top: 1.25rem;">
                 <a href="https://harunarrasyid.vercel.app" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.75rem; color: var(--text-secondary); text-decoration: none; transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">
