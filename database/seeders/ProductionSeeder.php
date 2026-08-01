@@ -22,8 +22,9 @@ class ProductionSeeder extends Seeder
                 'nama_desa' => 'Desa Pusat (Utama)',
                 'kecamatan' => 'Kecamatan Utama',
                 'kepala_desa' => 'Kepala Desa / Ketua Panitia',
-                'jumlah_warga' => 0,
+                'populasi' => 0,
                 'modal_awal' => 0,
+                'status' => 'aktif',
             ]
         );
 
