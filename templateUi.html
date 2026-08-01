@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NH-Finance | Sistem Manajemen Acara, Desa & Keuangan Bendahara</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome / Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <style>
+        :root {
+            --bg-primary: #090d16;
+            --bg-secondary: #111827;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --bg-glass: rgba(17, 24, 39, 0.85);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-primary: #10b981;
+            --accent-primary-hover: #059669;
+            --accent-primary-glow: rgba(16, 185, 129, 0.25);
+            --accent-blue: #3b82f6;
+            --accent-blue-glow: rgba(59, 130, 246, 0.25);
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            --sidebar-width: 280px;
+            --topbar-height: 76px;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-heading: 'Outfit', sans-serif;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html.light {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-glass: rgba(255, 255, 255, 0.9);
+            --border-color: rgba(15, 23, 42, 0.08);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-main);
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+                radial-gradient(at 90% 10%, rgba(59, 130, 246, 0.08) 0px, transparent 50%),
+                radial-gradient(at 50% 90%, rgba(245, 158, 11, 0.05) 0px, transparent 60%);
+            background-attachment: fixed;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* Layout Structure */
+        .app-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+
+        .sidebar-header {
+            height: var(--topbar-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent-primary), #06b6d4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 700;
+            box-shadow: 0 8px 20px var(--accent-primary-glow);
+        }
+
+        .brand-text {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+        .brand-text span {
+            color: var(--accent-primary);
+        }
+
+        .sidebar-content {
+            flex: 1;
+            padding: 1.5rem 1rem;
+            overflow-y: auto;
+        }
+
+        .nav-section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin: 1.25rem 0.75rem 0.5rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .nav-item {
+            width: 100%;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.925rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .nav-link-left {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link.active {
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--accent-primary), #059669);
+            box-shadow: 0 4px 15px var(--accent-primary-glow);
+            font-weight: 600;
+        }
+        .nav-link.active i {
+            color: #ffffff;
+        }
+
+        .nav-badge {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.15rem 0.55rem;
+            border-radius: 99px;
+        }
+        .nav-link.active .nav-badge {
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+        }
+
+        .role-switcher-box {
+            margin: 1.5rem 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+        }
+
+        .role-switcher-title {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .role-toggle-btn {
+            width: 100%;
+            padding: 0.55rem 0.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-primary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+        .role-toggle-btn:hover {
+            background: rgba(16, 185, 129, 0.25);
+        }
+
+        .sidebar-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-blue), #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: 2px solid var(--border-color);
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .user-role-label {
+            font-size: 0.75rem;
+            color: var(--accent-primary);
+            font-weight: 500;
+        }
+
+        /* Main Area */
+        .main-container {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        /* Top Navigation Bar */
+        .topbar {
+            height: var(--topbar-height);
+            background: var(--bg-glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            width: 320px;
+        }
+
+        .search-input-wrapper i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.6rem 1rem 0.6rem 2.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--accent-primary-glow);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        /* Sim Notification Button */
+        .btn-sim-notif {
+            padding: 0.55rem 1rem;
+            border-radius: 10px;
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+        .btn-sim-notif:hover {
+            background: rgba(59, 130, 246, 0.25);
+            transform: translateY(-1px);
+        }
+
+        /* Notification Bell & Dropdown */
+        .notif-wrapper {
+            position: relative;
+        }
+
+        .icon-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+        }
+        .icon-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--accent-rose);
+            color: #ffffff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg-secondary);
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .notif-dropdown {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            width: 380px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 100;
+        }
+        .notif-dropdown.show {
+            display: flex;
+            animation: slideDown 0.2s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .notif-header {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .notif-header h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .btn-mark-read {
+            font-size: 0.75rem;
+            color: var(--accent-primary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-mark-read:hover {
+            text-decoration: underline;
+        }
+
+        .notif-list {
+            max-height: 320px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .notif-item {
+            padding: 0.85rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.85rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .notif-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .notif-item.unread {
+            background: rgba(16, 185, 129, 0.05);
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .notif-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+        .notif-icon.emerald { background: rgba(16, 185, 129, 0.15); color: var(--accent-primary); }
+        .notif-icon.blue { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); }
+        .notif-icon.amber { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
+
+        .notif-body {
+            flex: 1;
+        }
+        .notif-body p {
+            font-size: 0.825rem;
+            color: var(--text-primary);
+            line-height: 1.4;
+            margin-bottom: 0.25rem;
+        }
+        .notif-body p strong {
+            font-weight: 600;
+        }
+        .notif-time {
+            font-size: 0.725rem;
+            color: var(--text-muted);
+        }
+
+        /* Content Area */
+        .content {
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .view-section {
+            display: none;
+        }
+        .view-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        .page-title h1 {
+            font-family: var(--font-heading);
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        .page-title p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Action Buttons */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.75rem 1.35rem;
+            background: linear-gradient(135deg, var(--accent-primary), #059669);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px var(--accent-primary-glow);
+            transition: var(--transition);
+            text-decoration: none;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--accent-primary-glow);
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            padding: 0.7rem 1.25rem;
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Stat Cards Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        .stat-icon.emerald { background: rgba(16, 185, 129, 0.15); color: var(--accent-primary); }
+        .stat-icon.blue { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); }
+        .stat-icon.amber { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
+        .stat-icon.rose { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+
+        .stat-value {
+            font-family: var(--font-heading);
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .stat-footer {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+        .trend-up {
+            color: var(--accent-primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .trend-desc {
+            color: var(--text-muted);
+        }
+
+        /* Chart Section Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        @media (max-width: 1024px) {
+            .charts-grid { grid-template-columns: 1fr; }
+        }
+
+        .card-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        .card-header h3 {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Table Design */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .custom-table th {
+            text-align: left;
+            padding: 1rem 1.25rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .custom-table td {
+            padding: 1rem 1.25rem;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        .custom-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge.success { background: rgba(16, 185, 129, 0.15); color: var(--accent-primary); }
+        .badge.info { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); }
+        .badge.warning { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
+        .badge.danger { background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); }
+
+        /* Progress Bar */
+        .progress-bar-wrap {
+            width: 100px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), #06b6d4);
+            border-radius: 99px;
+        }
+
+        /* Interactive Toast Notification */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toast-card {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 320px;
+            max-width: 420px;
+            animation: toastIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .toast-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+        .toast-title {
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            margin-bottom: 0.15rem;
+        }
+        .toast-msg {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Modal Dialog */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .modal-overlay.show {
+            display: flex;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .modal-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 520px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .modal-header h3 {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .btn-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        .form-label {
+            display: block;
+            font-size: 0.825rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--accent-primary-glow);
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .form-select option {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        /* Financial Alert Cards */
+        .fin-alert-card {
+            padding: 1.25rem;
+            border-radius: 16px;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .fin-alert-card i {
+            font-size: 1.5rem;
+            color: var(--accent-primary);
+        }
+        .fin-alert-text h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .fin-alert-text p {
+            font-size: 0.825rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-wrapper">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="brand-logo">
+                    <div class="brand-icon">
+                        <i class="fa-solid fa-cube"></i>
+                    </div>
+                    <div class="brand-text">NH-<span>Finance</span></div>
+                </a>
+            </div>
+
+            <div class="sidebar-content">
+                <div class="nav-section-title">Menu Utama</div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a class="nav-link active" onclick="switchTab('dashboard', this)">
+                            <div class="nav-link-left">
+                                <i class="fa-solid fa-chart-pie"></i>
+                                <span>Dashboard Statistik</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="switchTab('desa', this)">
+                            <div class="nav-link-left">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                                <span>Data Desa</span>
+                            </div>
+                            <span class="nav-badge" id="badge-desa">12</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="switchTab('acara', this)">
+                            <div class="nav-link-left">
+                                <i class="fa-solid fa-calendar-check"></i>
+                                <span>Data Acara (Event)</span>
+                            </div>
+                            <span class="nav-badge" id="badge-acara">18</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="nav-section-title">Keuangan & Bendahara</div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="switchTab('keuangan', this)">
+                            <div class="nav-link-left">
+                                <i class="fa-solid fa-wallet"></i>
+                                <span>Kas & Anggaran Acara</span>
+                            </div>
+                            <span class="badge success" style="padding: 0.15rem 0.5rem; font-size: 0.65rem;">Active</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="switchTab('laporan', this)">
+                            <div class="nav-link-left">
+                                <i class="fa-solid fa-file-invoice-dollar"></i>
+                                <span>Laporan Bendahara</span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="nav-section-title" id="admin-section-title">Superadmin Control</div>
+                <ul class="nav-menu" id="admin-nav-list">
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="switchTab('users', this)">
+                            <div class="nav-link-left">
+                                <i class="fa-solid fa-users-gear"></i>
+                                <span>Manajemen User & Role</span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Role Switcher Box -->
+                <div class="role-switcher-box">
+                    <div class="role-switcher-title">
+                        <span>Mode Peran (Demo Role)</span>
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <button class="role-toggle-btn" onclick="toggleDemoRole()">
+                        <i class="fa-solid fa-repeat"></i>
+                        <span id="role-mode-label">Mode: Superadmin</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar" id="user-avatar-text">SA</div>
+                    <div class="user-info">
+                        <span class="user-name" id="user-display-name">Ahmad Superadmin</span>
+                        <span class="user-role-label" id="user-display-role">Superadmin (Breeze)</span>
+                    </div>
+                </div>
+                <button class="icon-btn" title="Logout" style="width: 34px; height: 34px;">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN AREA -->
+        <main class="main-container">
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <div class="search-input-wrapper">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" class="search-input" placeholder="Cari data desa, acara, atau transaksi...">
+                    </div>
+                </div>
+
+                <div class="topbar-right">
+                    <!-- Simulasi Real-time Notif Trigger -->
+                    <button class="btn-sim-notif" onclick="simulateRealtimeNotification()">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>Simulasi Notifikasi Realtime</span>
+                    </button>
+
+                    <!-- Realtime Notification Bell -->
+                    <div class="notif-wrapper">
+                        <button class="icon-btn" onclick="toggleNotifDropdown()" id="bell-btn">
+                            <i class="fa-regular fa-bell"></i>
+                            <span class="notif-badge" id="notif-count">3</span>
+                        </button>
+
+                        <div class="notif-dropdown" id="notif-dropdown">
+                            <div class="notif-header">
+                                <h4>Pusat Notifikasi</h4>
+                                <button class="btn-mark-read" onclick="markAllRead()">Tandai Semua Dibaca</button>
+                            </div>
+                            <div class="notif-list" id="notif-list">
+                                <div class="notif-item unread">
+                                    <div class="notif-icon emerald">
+                                        <i class="fa-solid fa-wallet"></i>
+                                    </div>
+                                    <div class="notif-body">
+                                        <p><strong>Bendahara</strong> mencatat pengeluaran Rp 12.500.000 untuk <strong>Festival Budaya</strong></p>
+                                        <span class="notif-time">2 menit yang lalu</span>
+                                    </div>
+                                </div>
+                                <div class="notif-item unread">
+                                    <div class="notif-icon blue">
+                                        <i class="fa-solid fa-calendar-plus"></i>
+                                    </div>
+                                    <div class="notif-body">
+                                        <p>Acara baru <strong>Musyawarah Desa Sukamaju</strong> telah ditambahkan ke rencana</p>
+                                        <span class="notif-time">25 menit yang lalu</span>
+                                    </div>
+                                </div>
+                                <div class="notif-item unread">
+                                    <div class="notif-icon amber">
+                                        <i class="fa-solid fa-map-pin"></i>
+                                    </div>
+                                    <div class="notif-body">
+                                        <p>Data desa <strong>Desa Karanganyar</strong> berhasil diperbarui</p>
+                                        <span class="notif-time">1 jam yang lalu</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- CONTENT AREA -->
+            <div class="content">
+
+                <!-- SECTION 1: DASHBOARD STATISTIK -->
+                <section id="view-dashboard" class="view-section active">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h1>Dashboard Eksekutif</h1>
+                            <p>Pantau data Desa, agenda Acara, serta realisasi Anggaran Kas secara realtime.</p>
+                        </div>
+                        <div style="display: flex; gap: 0.75rem;">
+                            <button class="btn-outline" onclick="exportData('PDF')">
+                                <i class="fa-solid fa-download"></i>
+                                <span>Export Report</span>
+                            </button>
+                            <button class="btn-primary" onclick="openModal('modal-acara')">
+                                <i class="fa-solid fa-plus"></i>
+                                <span>Buat Acara Baru</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STATS CARDS -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <span class="stat-label">Total Desa Binaan</span>
+                                <div class="stat-icon emerald">
+                                    <i class="fa-solid fa-map-location-dot"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value" id="stat-desa">12</div>
+                            <div class="stat-footer">
+                                <span class="trend-up"><i class="fa-solid fa-arrow-up"></i> +2</span>
+                                <span class="trend-desc">Desa aktif semester ini</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <span class="stat-label">Total Agenda Acara</span>
+                                <div class="stat-icon blue">
+                                    <i class="fa-solid fa-calendar-check"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value" id="stat-acara">18</div>
+                            <div class="stat-footer">
+                                <span class="trend-up"><i class="fa-solid fa-arrow-up"></i> 4</span>
+                                <span class="trend-desc">Acara sedang berjalan</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <span class="stat-label">Total Rencana Anggaran</span>
+                                <div class="stat-icon amber">
+                                    <i class="fa-solid fa-sack-dollar"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value" id="stat-anggaran">Rp 485,0 Jt</div>
+                            <div class="stat-footer">
+                                <span class="trend-up"><i class="fa-solid fa-check"></i> 88%</span>
+                                <span class="trend-desc">Alokasi anggaran disetujui</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <span class="stat-label">Saldo Kas Bendahara</span>
+                                <div class="stat-icon rose">
+                                    <i class="fa-solid fa-vault"></i>
+                                </div>
+                            </div>
+                            <div class="stat-value" id="stat-saldo">Rp 214,5 Jt</div>
+                            <div class="stat-footer">
+                                <span class="trend-up" style="color: var(--accent-primary);"><i class="fa-solid fa-circle-check"></i> Sehat</span>
+                                <span class="trend-desc">Surplus saldo operasional</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CHARTS GRID -->
+                    <div class="charts-grid">
+                        <div class="card-box">
+                            <div class="card-header">
+                                <h3>Realisasi Anggaran vs Pengeluaran per Acara (Juta Rp)</h3>
+                                <span class="badge info">Realtime Data</span>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="chartAnggaran"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="card-box">
+                            <div class="card-header">
+                                <h3>Status Pelaksanaan Acara</h3>
+                            </div>
+                            <div class="chart-container" style="display: flex; align-items: center; justify-content: center;">
+                                <canvas id="chartStatus"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TABLE ACARA TERBARU -->
+                    <div class="card-box">
+                        <div class="card-header">
+                            <h3>Agenda Acara Terbaru & Alokasi Kas</h3>
+                            <button class="btn-outline" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;" onclick="switchTab('acara')">Lihat Semua</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nama Acara</th>
+                                        <th>Desa Penyelenggara</th>
+                                        <th>Waktu Pelaksanaan</th>
+                                        <th>Rencana Anggaran</th>
+                                        <th>Realisasi Bendahara</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Festival Budaya Nusantara</strong></td>
+                                        <td>Desa Sukamaju</td>
+                                        <td>15 Agu 2026</td>
+                                        <td>Rp 75.000.000</td>
+                                        <td>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <span>Rp 60.000.000</span>
+                                                <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width: 80%;"></div></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge success">Ongoing</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Musyawarah Pembangunan Desa</strong></td>
+                                        <td>Desa Karanganyar</td>
+                                        <td>20 Agu 2026</td>
+                                        <td>Rp 25.000.000</td>
+                                        <td>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <span>Rp 10.000.000</span>
+                                                <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width: 40%;"></div></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge info">Planned</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Pelatihan UMKM Digital</strong></td>
+                                        <td>Desa Mekarsari</td>
+                                        <td>05 Sep 2026</td>
+                                        <td>Rp 35.000.000</td>
+                                        <td>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <span>Rp 35.000.000</span>
+                                                <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width: 100%;"></div></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge success">Completed</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 2: CRUD DATA DESA -->
+                <section id="view-desa" class="view-section">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h1>Data Nama Desa</h1>
+                            <p>Kelola daftar desa binaan dan kecamatan yang terintegrasi di sistem NH-Finance.</p>
+                        </div>
+                        <button class="btn-primary" onclick="openModal('modal-desa')">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Tambah Desa Baru</span>
+                        </button>
+                    </div>
+
+                    <div class="card-box">
+                        <div class="table-responsive">
+                            <table class="custom-table" id="table-desa">
+                                <thead>
+                                    <tr>
+                                        <th>Kode Desa</th>
+                                        <th>Nama Desa</th>
+                                        <th>Kecamatan</th>
+                                        <th>Kepala Desa / P.J.</th>
+                                        <th>Jumlah Acara</th>
+                                        <th>Status</th>
+                                        <th style="text-align: right;">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-desa">
+                                    <!-- Dynamic rows via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 3: CRUD DATA ACARA -->
+                <section id="view-acara" class="view-section">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h1>Data Nama Acara (Event)</h1>
+                            <p>Kelola seluruh agenda acara, relasi ke desa, serta pengawasan anggaran bendahara.</p>
+                        </div>
+                        <button class="btn-primary" onclick="openModal('modal-acara')">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Tambah Acara Baru</span>
+                        </button>
+                    </div>
+
+                    <div class="card-box">
+                        <div class="table-responsive">
+                            <table class="custom-table" id="table-acara">
+                                <thead>
+                                    <tr>
+                                        <th>Nama Acara</th>
+                                        <th>Desa Terkait</th>
+                                        <th>Tanggal Pelaksanaan</th>
+                                        <th>Anggaran Rencana</th>
+                                        <th>Status Acara</th>
+                                        <th style="text-align: right;">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-acara">
+                                    <!-- Dynamic rows via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 4: KEUANGAN BENDAHARA (IMPROVISASI) -->
+                <section id="view-keuangan" class="view-section">
+                    <div class="page-header">
+                        <div class="page-title">
+                            <h1>Kas & Anggaran Acara (Bendahara)</h1>
+                            <p>Pencatatan realisasi Pemasukan & Pengeluaran kas acara oleh Admin Bendahara.</p>
+                        </div>
+                        <button class="btn-primary" onclick="openModal('modal-transaksi')">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Catat Transaksi Kas</span>
+                        </button>
+                    </div>
+
+                    <!-- Alert Info -->
+                    <div class="fin-alert-card">
+                        <i class="fa-solid fa-shield-check"></i>
+                        <div class="fin-alert-text">
+                            <h4>Status Keuangan Sehat & Terkendali</h4>
+                            <p>Seluruh realisasi pengeluaran acara masih berada di bawah batas pagu anggaran yang disetujui Superadmin.</p>
+                        </div>
+                    </div>
+
+                    <div class="card-box">
+                        <div class="card-header">
+                            <h3>Buku Kas Rekapitulasi Transaksi Bendahara</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>No. Transaksi</th>
+                                        <th>Acara & Desa</th>
+                                        <th>Tipe Transaksi</th>
+                                        <th>Nominal (Rp)</th>
+                                        <th>Tanggal</th>
+                                        <th>Keterangan / Bukti</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-transaksi">
+                                    <!-- Dynamic transactions via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL 1: TAMBAH DESA -->
+    <div class="modal-overlay" id="modal-desa">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Tambah Data Desa</h3>
+                <button class="btn-close" onclick="closeModal('modal-desa')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Kode Desa</label>
+                    <input type="text" id="input-kode-desa" class="form-input" placeholder="Contoh: DS-013">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nama Desa</label>
+                    <input type="text" id="input-nama-desa" class="form-input" placeholder="Contoh: Desa Sukamulya">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Kecamatan</label>
+                    <input type="text" id="input-kecamatan-desa" class="form-input" placeholder="Contoh: Kecamatan Horizon">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Kepala Desa / Penanggung Jawab</label>
+                    <input type="text" id="input-kades" class="form-input" placeholder="Nama lengkap">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-outline" onclick="closeModal('modal-desa')">Batal</button>
+                <button class="btn-primary" onclick="simpanDesa()">Simpan Desa</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: TAMBAH ACARA -->
+    <div class="modal-overlay" id="modal-acara">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Tambah Data Acara (Event)</h3>
+                <button class="btn-close" onclick="closeModal('modal-acara')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nama Acara</label>
+                    <input type="text" id="input-nama-acara" class="form-input" placeholder="Contoh: Gebyar Seni Budaya">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Pilih Desa Penyelenggara</label>
+                    <select id="select-desa-acara" class="form-select">
+                        <option value="Desa Sukamaju">Desa Sukamaju</option>
+                        <option value="Desa Karanganyar">Desa Karanganyar</option>
+                        <option value="Desa Mekarsari">Desa Mekarsari</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tanggal Pelaksanaan</label>
+                    <input type="date" id="input-tgl-acara" class="form-input" value="2026-08-25">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Rencana Anggaran (Rp)</label>
+                    <input type="number" id="input-anggaran-acara" class="form-input" placeholder="50000000">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-outline" onclick="closeModal('modal-acara')">Batal</button>
+                <button class="btn-primary" onclick="simpanAcara()">Simpan Acara</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: CATAT TRANSAKSI KAS -->
+    <div class="modal-overlay" id="modal-transaksi">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Catat Arus Kas Acara (Bendahara)</h3>
+                <button class="btn-close" onclick="closeModal('modal-transaksi')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Pilih Acara Terkait</label>
+                    <select class="form-select">
+                        <option>Festival Budaya Nusantara (Desa Sukamaju)</option>
+                        <option>Musyawarah Pembangunan Desa (Desa Karanganyar)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tipe Transaksi</label>
+                    <select class="form-select" id="input-tipe-trx">
+                        <option value="Pengeluaran">Pengeluaran Kas Acara</option>
+                        <option value="Pemasukan">Pemasukan / Dana Tambahan</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nominal Transaksi (Rp)</label>
+                    <input type="number" id="input-nominal-trx" class="form-input" placeholder="15000000">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Keterangan / Bukti Nota</label>
+                    <input type="text" id="input-ket-trx" class="form-input" placeholder="Pembayaran sewa panggung dan sound system">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-outline" onclick="closeModal('modal-transaksi')">Batal</button>
+                <button class="btn-primary" onclick="simpanTransaksi()">Simpan Transaksi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        // DATA STATIS DESA
+        let dataDesa = [
+            { id: 1, kode: "DS-001", nama: "Desa Sukamaju", kecamatan: "Kecamatan Horizon", kades: "Bpk. Hendra Gunawan", acaraCount: 5, status: "Aktif" },
+            { id: 2, kode: "DS-002", nama: "Desa Karanganyar", kecamatan: "Kecamatan Horizon", kades: "Ibu Siti Aisyah", acaraCount: 3, status: "Aktif" },
+            { id: 3, kode: "DS-003", nama: "Desa Mekarsari", kecamatan: "Kecamatan Nusantara", kades: "Bpk. Ahmad Fauzi", acaraCount: 4, status: "Aktif" },
+            { id: 4, kode: "DS-004", nama: "Desa Sindangsari", kecamatan: "Kecamatan Nusantara", kades: "Bpk. Dedi Kurniawan", acaraCount: 2, status: "Aktif" }
+        ];
+
+        // DATA STATIS ACARA
+        let dataAcara = [
+            { id: 101, nama: "Festival Budaya Nusantara", desa: "Desa Sukamaju", tanggal: "15 Agu 2026", anggaran: 75000000, status: "Ongoing" },
+            { id: 102, nama: "Musyawarah Pembangunan Desa", desa: "Desa Karanganyar", tanggal: "20 Agu 2026", anggaran: 25000000, status: "Planned" },
+            { id: 103, nama: "Pelatihan UMKM Digital", desa: "Desa Mekarsari", tanggal: "05 Sep 2026", anggaran: 35000000, status: "Completed" },
+            { id: 104, nama: "Turnamen Sepak Bola Desa", desa: "Desa Sukamaju", tanggal: "12 Sep 2026", anggaran: 40000000, status: "Planned" }
+        ];
+
+        // DATA STATIS TRANSAKSI KEUANGAN BENDAHARA
+        let dataTransaksi = [
+            { no: "TRX-8821", acara: "Festival Budaya Nusantara (Desa Sukamaju)", tipe: "Pengeluaran", nominal: 12500000, tgl: "30-07-2026", ket: "Sewa Panggung & Lighting" },
+            { no: "TRX-8820", acara: "Festival Budaya Nusantara (Desa Sukamaju)", tipe: "Pemasukan", nominal: 75000000, tgl: "25-07-2026", ket: "Pencairan Dana Anggaran Acara" },
+            { no: "TRX-8819", acara: "Pelatihan UMKM Digital (Desa Mekarsari)", tipe: "Pengeluaran", nominal: 8500000, tgl: "20-07-2026", ket: "Honor Pemateri & Konsumsi" }
+        ];
+
+        let notifUnreadCount = 3;
+        let currentRole = "superadmin"; // 'superadmin' | 'bendahara'
+
+        // INIT LOAD
+        document.addEventListener("DOMContentLoaded", () => {
+            renderTableDesa();
+            renderTableAcara();
+            renderTableTransaksi();
+            initCharts();
+        });
+
+        // TAB SWITCHER
+        function switchTab(viewId, el) {
+            document.querySelectorAll(".view-section").forEach(sec => sec.classList.remove("active"));
+            const target = document.getElementById("view-" + viewId);
+            if (target) target.classList.add("active");
+
+            if (el) {
+                document.querySelectorAll(".nav-link").forEach(link => link.classList.remove("active"));
+                el.classList.add("active");
+            }
+        }
+
+        // RENDER TABLES
+        function renderTableDesa() {
+            const tbody = document.getElementById("tbody-desa");
+            tbody.innerHTML = "";
+            dataDesa.forEach(d => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${d.kode}</strong></td>
+                        <td>${d.nama}</td>
+                        <td>${d.kecamatan}</td>
+                        <td>${d.kades}</td>
+                        <td><span class="badge info">${d.acaraCount} Acara</span></td>
+                        <td><span class="badge success">${d.status}</span></td>
+                        <td style="text-align: right;">
+                            ${currentRole === 'superadmin' ? `
+                                <button class="btn-outline" style="padding: 0.35rem 0.65rem;" onclick="hapusDesa(${d.id})"><i class="fa-solid fa-trash" style="color: var(--accent-rose);"></i></button>
+                            ` : `<span style="font-size:0.75rem; color: var(--text-muted);">View Only</span>`}
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById("badge-desa").innerText = dataDesa.length;
+            document.getElementById("stat-desa").innerText = dataDesa.length;
+        }
+
+        function renderTableAcara() {
+            const tbody = document.getElementById("tbody-acara");
+            tbody.innerHTML = "";
+            dataAcara.forEach(a => {
+                let badgeClass = "info";
+                if (a.status === "Ongoing") badgeClass = "success";
+                if (a.status === "Completed") badgeClass = "info";
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${a.nama}</strong></td>
+                        <td>${a.desa}</td>
+                        <td>${a.tanggal}</td>
+                        <td>Rp ${a.anggaran.toLocaleString("id-ID")}</td>
+                        <td><span class="badge ${badgeClass}">${a.status}</span></td>
+                        <td style="text-align: right;">
+                            <button class="btn-outline" style="padding: 0.35rem 0.65rem;" onclick="hapusAcara(${a.id})"><i class="fa-solid fa-trash" style="color: var(--accent-rose);"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById("badge-acara").innerText = dataAcara.length;
+            document.getElementById("stat-acara").innerText = dataAcara.length;
+        }
+
+        function renderTableTransaksi() {
+            const tbody = document.getElementById("tbody-transaksi");
+            tbody.innerHTML = "";
+            dataTransaksi.forEach(t => {
+                let badgeType = t.tipe === "Pemasukan" ? "success" : "danger";
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${t.no}</strong></td>
+                        <td>${t.acara}</td>
+                        <td><span class="badge ${badgeType}">${t.tipe}</span></td>
+                        <td><strong>Rp ${t.nominal.toLocaleString("id-ID")}</strong></td>
+                        <td>${t.tgl}</td>
+                        <td>${t.ket}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // CRUD ACTIONS
+        function simpanDesa() {
+            const kode = document.getElementById("input-kode-desa").value || "DS-009";
+            const nama = document.getElementById("input-nama-desa").value || "Desa Baru";
+            const camat = document.getElementById("input-kecamatan-desa").value || "Kecamatan Horizon";
+            const kades = document.getElementById("input-kades").value || "Bpk. Penanggung Jawab";
+
+            dataDesa.unshift({
+                id: Date.now(),
+                kode: kode,
+                nama: nama,
+                kecamatan: camat,
+                kades: kades,
+                acaraCount: 0,
+                status: "Aktif"
+            });
+
+            renderTableDesa();
+            closeModal('modal-desa');
+            showToast("Desa Berhasil Ditambahkan", `Data ${nama} telah masuk ke dalam database NH-Finance.`);
+            pushNotification("Desa Baru Terdaftar", `Superadmin menambah data desa <strong>${nama}</strong>`);
+        }
+
+        function hapusDesa(id) {
+            dataDesa = dataDesa.filter(d => d.id !== id);
+            renderTableDesa();
+            showToast("Desa Dihapus", "Data desa berhasil dihapus dari sistem.");
+        }
+
+        function simpanAcara() {
+            const nama = document.getElementById("input-nama-acara").value || "Agenda Baru";
+            const desa = document.getElementById("select-desa-acara").value;
+            const tgl = document.getElementById("input-tgl-acara").value || "25 Agu 2026";
+            const anggaran = parseInt(document.getElementById("input-anggaran-acara").value || "30000000");
+
+            dataAcara.unshift({
+                id: Date.now(),
+                nama: nama,
+                desa: desa,
+                tanggal: tgl,
+                anggaran: anggaran,
+                status: "Planned"
+            });
+
+            renderTableAcara();
+            closeModal('modal-acara');
+            showToast("Acara Berhasil Ditambahkan", `Agenda ${nama} untuk ${desa} sukses dijadwalkan.`);
+            pushNotification("Agenda Acara Baru", `Acara <strong>${nama}</strong> direncanakan dengan anggaran Rp ${anggaran.toLocaleString("id-ID")}`);
+        }
+
+        function hapusAcara(id) {
+            dataAcara = dataAcara.filter(a => a.id !== id);
+            renderTableAcara();
+            showToast("Acara Dihapus", "Data acara berhasil dihapus dari daftar.");
+        }
+
+        function simpanTransaksi() {
+            const tipe = document.getElementById("input-tipe-trx").value;
+            const nominal = parseInt(document.getElementById("input-nominal-trx").value || "10000000");
+            const ket = document.getElementById("input-ket-trx").value || "Realisasi Biaya Acara";
+
+            dataTransaksi.unshift({
+                no: "TRX-" + Math.floor(1000 + Math.random() * 9000),
+                acara: "Festival Budaya Nusantara (Desa Sukamaju)",
+                tipe: tipe,
+                nominal: nominal,
+                tgl: "31-07-2026",
+                ket: ket
+            });
+
+            renderTableTransaksi();
+            closeModal('modal-transaksi');
+            showToast("Transaksi Dicatat", `Bukti ${tipe.toLowerCase()} senilai Rp ${nominal.toLocaleString("id-ID")} tersimpan.`);
+            pushNotification("Aktivitas Kas Bendahara", `Bendahara mencatat <strong>${tipe}</strong> Rp ${nominal.toLocaleString("id-ID")} (${ket})`);
+        }
+
+        // ROLE TOGGLER (DEMO)
+        function toggleDemoRole() {
+            if (currentRole === "superadmin") {
+                currentRole = "bendahara";
+                document.getElementById("role-mode-label").innerText = "Mode: Admin (Bendahara)";
+                document.getElementById("user-display-name").innerText = "Rina Bendahara";
+                document.getElementById("user-display-role").innerText = "Admin Bendahara (Kas)";
+                document.getElementById("user-avatar-text").innerText = "BD";
+                document.getElementById("admin-section-title").style.display = "none";
+                document.getElementById("admin-nav-list").style.display = "none";
+                showToast("Beralih ke Peran Bendahara", "Akses CRUD terbatas ke pengelolaan Acara dan Arus Kas Keuangan.");
+            } else {
+                currentRole = "superadmin";
+                document.getElementById("role-mode-label").innerText = "Mode: Superadmin";
+                document.getElementById("user-display-name").innerText = "Ahmad Superadmin";
+                document.getElementById("user-display-role").innerText = "Superadmin (Breeze)";
+                document.getElementById("user-avatar-text").innerText = "SA";
+                document.getElementById("admin-section-title").style.display = "block";
+                document.getElementById("admin-nav-list").style.display = "block";
+                showToast("Beralih ke Peran Superadmin", "Kontrol penuh ke seluruh fitur dan manajemen pengguna.");
+            }
+            renderTableDesa();
+        }
+
+        // REALTIME NOTIFICATION SYSTEM (SIMULATOR)
+        function toggleNotifDropdown() {
+            const dd = document.getElementById("notif-dropdown");
+            dd.classList.toggle("show");
+        }
+
+        function markAllRead() {
+            notifUnreadCount = 0;
+            updateNotifBadge();
+            document.querySelectorAll(".notif-item").forEach(item => item.classList.remove("unread"));
+            showToast("Semua Dibaca", "Daftar notifikasi telah ditandai sebagai dibaca.");
+        }
+
+        function simulateRealtimeNotification() {
+            const messages = [
+                { title: "Pengajuan Anggaran Baru", desc: "Desa Mekarsari mengajukan anggaran Rp 45.000.000 untuk Pesta Rakyat.", icon: "amber", fa: "fa-solid fa-file-invoice-dollar" },
+                { title: "Verifikasi Bendahara", desc: "Admin Bendahara menyetujui transaksi pengeluaran TRX-8821.", icon: "emerald", fa: "fa-solid fa-check-double" },
+                { title: "Desa Baru Binaan", desc: "Desa Sindangsari baru saja mengaktifkan status kepesertaan.", icon: "blue", fa: "fa-solid fa-map-location-dot" }
+            ];
+            const pick = messages[Math.floor(Math.random() * messages.length)];
+
+            pushNotification(pick.title, pick.desc, pick.icon, pick.fa);
+            showToast("Realtime Alert: " + pick.title, pick.desc);
+        }
+
+        function pushNotification(title, desc, color = "emerald", icon = "fa-solid fa-bell") {
+            notifUnreadCount++;
+            updateNotifBadge();
+
+            const list = document.getElementById("notif-list");
+            const div = document.createElement("div");
+            div.className = "notif-item unread";
+            div.innerHTML = `
+                <div class="notif-icon ${color}">
+                    <i class="${icon}"></i>
+                </div>
+                <div class="notif-body">
+                    <p><strong>${title}:</strong> ${desc}</p>
+                    <span class="notif-time">Baru saja</span>
+                </div>
+            `;
+            list.prepend(div);
+        }
+
+        function updateNotifBadge() {
+            const badge = document.getElementById("notif-count");
+            if (notifUnreadCount > 0) {
+                badge.style.display = "flex";
+                badge.innerText = notifUnreadCount;
+            } else {
+                badge.style.display = "none";
+            }
+        }
+
+        // TOAST ALERT ENGINE
+        function showToast(title, message) {
+            const container = document.getElementById("toast-container");
+            const toast = document.createElement("div");
+            toast.className = "toast-card";
+            toast.innerHTML = `
+                <div class="toast-icon">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-msg">${message}</div>
+                </div>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transform = "translateY(10px)";
+                toast.style.transition = "all 0.3s ease";
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // MODAL HELPER
+        function openModal(id) {
+            document.getElementById(id).classList.add("show");
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove("show");
+        }
+
+        // CHART.JS INIT
+        function initCharts() {
+            const ctx1 = document.getElementById("chartAnggaran");
+            if (ctx1) {
+                new Chart(ctx1, {
+                    type: "bar",
+                    data: {
+                        labels: ["Festival Budaya", "Musyawarah Desa", "Pelatihan UMKM", "Turnamen Bola"],
+                        datasets: [
+                            {
+                                label: "Anggaran Rencana",
+                                data: [75, 25, 35, 40],
+                                backgroundColor: "rgba(59, 130, 246, 0.7)",
+                                borderRadius: 8
+                            },
+                            {
+                                label: "Realisasi Kas Bendahara",
+                                data: [60, 10, 35, 15],
+                                backgroundColor: "rgba(16, 185, 129, 0.9)",
+                                borderRadius: 8
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { labels: { color: "#94a3b8", font: { family: "'Plus Jakarta Sans', sans-serif" } } }
+                        },
+                        scales: {
+                            y: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#94a3b8" } },
+                            x: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#94a3b8" } }
+                        }
+                    }
+                });
+            }
+
+            const ctx2 = document.getElementById("chartStatus");
+            if (ctx2) {
+                new Chart(ctx2, {
+                    type: "doughnut",
+                    data: {
+                        labels: ["Ongoing", "Planned", "Completed"],
+                        datasets: [{
+                            data: [6, 8, 4],
+                            backgroundColor: [
+                                "rgba(16, 185, 129, 0.9)",
+                                "rgba(59, 130, 246, 0.9)",
+                                "rgba(245, 158, 11, 0.9)"
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: "bottom", labels: { color: "#94a3b8" } }
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
