@@ -119,13 +119,20 @@
 
         .sidebar.collapsed {
             width: 80px;
+            overflow-x: hidden;
         }
 
         .sidebar.collapsed .menu-text, 
         .sidebar.collapsed .logo-text,
+        .sidebar.collapsed .brand-text,
         .sidebar.collapsed .menu-group-title,
         .sidebar.collapsed .sidebar-branding {
-            display: none;
+            display: none !important;
+        }
+
+        .sidebar.collapsed .brand {
+            justify-content: center;
+            padding: 0;
         }
 
         .brand {
@@ -835,11 +842,13 @@
                 </div>
 
                 <div class="topbar-right">
-                    <!-- Simulasi Real-time Notif Trigger -->
+                    <!-- Simulasi Real-time Notif Trigger (Hanya Mode Local/Demo) -->
+                    @if(app()->isLocal())
                     <button type="button" class="btn-sim-notif" onclick="triggerSimulatedNotif()">
                         <i data-lucide="zap" style="width: 16px;"></i>
                         <span>Simulasi Notifikasi Realtime</span>
                     </button>
+                    @endif
 
                     <!-- Theme Toggle -->
                     <button type="button" class="icon-btn" onclick="toggleTheme()" title="Toggle Light/Dark Mode">
