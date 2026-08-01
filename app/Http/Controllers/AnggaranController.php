@@ -65,6 +65,13 @@ class AnggaranController extends Controller
         ]);
 
         $user = auth()->user();
+        if ($user && $user->isSuperadmin()) {
+            if ($request->expectsJson() || $request->ajax()) {
+                abort(403, 'Superadmin hanya bertugas memantau instansi dan tidak berhak mengubah modal awal.');
+            }
+            return redirect()->route('anggaran.index')->with('error', 'Superadmin hanya bertugas memantau instansi dan tidak berhak mengubah modal awal.');
+        }
+
         $desaId = $request->desa_id;
 
         if ($user && $user->isBendahara() && $user->desa_id) {

@@ -31,6 +31,13 @@ class PengeluaranController extends Controller
 
     public function store(Request $request)
     {
+        if ($request->user() && $request->user()->isSuperadmin()) {
+            if ($request->expectsJson() || $request->ajax()) {
+                abort(403, 'Superadmin hanya bertugas memantau instansi dan tidak berhak mencatat pengeluaran.');
+            }
+            return redirect()->route('pengeluaran.index')->with('error', 'Superadmin hanya bertugas memantau instansi dan tidak berhak mencatat pengeluaran.');
+        }
+
         $validated = $request->validate([
             'acara_id' => 'required|exists:acaras,id',
             'jumlah' => 'required|numeric|min:1',
@@ -57,6 +64,13 @@ class PengeluaranController extends Controller
 
     public function update(Request $request, TransaksiKeuangan $pengeluaran)
     {
+        if ($request->user() && $request->user()->isSuperadmin()) {
+            if ($request->expectsJson() || $request->ajax()) {
+                abort(403, 'Superadmin hanya bertugas memantau instansi dan tidak berhak mengubah data pengeluaran.');
+            }
+            return redirect()->route('pengeluaran.index')->with('error', 'Superadmin hanya bertugas memantau instansi dan tidak berhak mengubah data pengeluaran.');
+        }
+
         $validated = $request->validate([
             'acara_id' => 'required|exists:acaras,id',
             'jumlah' => 'required|numeric|min:1',
@@ -80,6 +94,13 @@ class PengeluaranController extends Controller
 
     public function destroy(TransaksiKeuangan $pengeluaran)
     {
+        if (auth()->user() && auth()->user()->isSuperadmin()) {
+            if (request()->expectsJson() || request()->ajax()) {
+                abort(403, 'Superadmin hanya bertugas memantau instansi dan tidak berhak menghapus data pengeluaran.');
+            }
+            return redirect()->route('pengeluaran.index')->with('error', 'Superadmin hanya bertugas memantau instansi dan tidak berhak menghapus data pengeluaran.');
+        }
+
         $ket = $pengeluaran->keterangan;
         $pengeluaran->delete();
         ActivityLog::log('Hapus Pengeluaran', 'Menghapus data pengeluaran: ' . $ket);

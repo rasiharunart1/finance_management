@@ -61,6 +61,13 @@ class KeuanganController extends Controller
 
     public function store(Request $request)
     {
+        if ($request->user() && $request->user()->isSuperadmin()) {
+            if ($request->expectsJson() || $request->ajax()) {
+                abort(403, 'Superadmin hanya bertugas memantau instansi dan tidak berhak mencatat transaksi kas.');
+            }
+            return redirect()->route('keuangan.index')->with('error', 'Superadmin hanya bertugas memantau instansi dan tidak berhak mencatat transaksi kas.');
+        }
+
         $validated = $request->validate([
             'acara_id' => 'required|exists:acaras,id',
             'tipe' => 'required|in:pemasukan,pengeluaran',
@@ -99,6 +106,13 @@ class KeuanganController extends Controller
 
     public function destroy(TransaksiKeuangan $keuangan)
     {
+        if (auth()->user() && auth()->user()->isSuperadmin()) {
+            if (request()->expectsJson() || request()->ajax()) {
+                abort(403, 'Superadmin hanya bertugas memantau instansi dan tidak berhak menghapus transaksi kas.');
+            }
+            return redirect()->route('keuangan.index')->with('error', 'Superadmin hanya bertugas memantau instansi dan tidak berhak menghapus transaksi kas.');
+        }
+
         $no = $keuangan->nomor_transaksi;
         $keuangan->delete();
 

@@ -13,12 +13,23 @@
                 <i data-lucide="file-spreadsheet" style="width: 16px;"></i>
                 <span>Export Excel</span>
             </a>
+            @if(!auth()->user()->isSuperadmin())
             <button type="button" class="btn-primary" onclick="openModal('modal-tambah-transaksi')">
                 <i class="fa-solid fa-plus"></i>
                 <span>Catat Transaksi Kas</span>
             </button>
+            @endif
         </div>
     </div>
+
+    @if(auth()->user()->isSuperadmin())
+    <div style="padding: 14px 18px; margin-bottom: 24px; border-radius: var(--radius-md); background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); display: flex; align-items: center; gap: 12px; color: var(--text-primary);">
+        <i data-lucide="shield-alert" style="width: 20px; color: #3b82f6; flex-shrink: 0;"></i>
+        <div style="font-size: 13px;">
+            <strong>Mode Pemantauan Superadmin:</strong> Anda sedang melihat data dalam mode pantau instansi (read-only). Superadmin tidak berhak mengedit atau mencatat transaksi kas.
+        </div>
+    </div>
+    @endif
 
     <!-- FINANCIAL SUMMARY CARDS -->
     <div class="stats-grid" style="margin-bottom: 24px;">
@@ -124,6 +135,7 @@
                             @endif
                         </td>
                         <td style="text-align: right;">
+                            @if(!auth()->user()->isSuperadmin())
                             <form action="{{ route('keuangan.destroy', $t) }}" method="POST" onsubmit="return confirm('Hapus transaksi kas {{ $t->nomor_transaksi }}?');" style="margin: 0;">
                                 @csrf
                                 @method('DELETE')
@@ -131,6 +143,9 @@
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </form>
+                            @else
+                            <span style="font-size: 11px; color: var(--text-secondary);">-</span>
+                            @endif
                         </td>
                     </tr>
                     @empty
@@ -149,6 +164,7 @@
         </div>
     </div>
 
+    @if(!auth()->user()->isSuperadmin())
     <!-- MODAL CATAT TRANSAKSI KAS -->
     <div class="modal-overlay" id="modal-tambah-transaksi">
         <div class="modal-card">
@@ -199,4 +215,5 @@
             </form>
         </div>
     </div>
+    @endif
 </x-app-layout>

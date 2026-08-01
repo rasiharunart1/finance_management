@@ -31,6 +31,13 @@ class PemasukanController extends Controller
 
     public function store(Request $request)
     {
+        if ($request->user() && $request->user()->isSuperadmin()) {
+            if ($request->expectsJson() || $request->ajax()) {
+                abort(403, 'Superadmin hanya bertugas memantau instansi dan tidak berhak mencatat pemasukan.');
+            }
+            return redirect()->route('pemasukan.index')->with('error', 'Superadmin hanya bertugas memantau instansi dan tidak berhak mencatat pemasukan.');
+        }
+
         $validated = $request->validate([
             'acara_id' => 'required|exists:acaras,id',
             'jumlah' => 'required|numeric|min:1',
@@ -57,6 +64,13 @@ class PemasukanController extends Controller
 
     public function update(Request $request, TransaksiKeuangan $pemasukan)
     {
+        if ($request->user() && $request->user()->isSuperadmin()) {
+            if ($request->expectsJson() || $request->ajax()) {
+                abort(403, 'Superadmin hanya bertugas memantau instansi dan tidak berhak mengubah data pemasukan.');
+            }
+            return redirect()->route('pemasukan.index')->with('error', 'Superadmin hanya bertugas memantau instansi dan tidak berhak mengubah data pemasukan.');
+        }
+
         $validated = $request->validate([
             'acara_id' => 'required|exists:acaras,id',
             'jumlah' => 'required|numeric|min:1',
@@ -80,6 +94,13 @@ class PemasukanController extends Controller
 
     public function destroy(TransaksiKeuangan $pemasukan)
     {
+        if (auth()->user() && auth()->user()->isSuperadmin()) {
+            if (request()->expectsJson() || request()->ajax()) {
+                abort(403, 'Superadmin hanya bertugas memantau instansi dan tidak berhak menghapus data pemasukan.');
+            }
+            return redirect()->route('pemasukan.index')->with('error', 'Superadmin hanya bertugas memantau instansi dan tidak berhak menghapus data pemasukan.');
+        }
+
         $ket = $pemasukan->keterangan;
         $pemasukan->delete();
         ActivityLog::log('Hapus Pemasukan', 'Menghapus data pemasukan: ' . $ket);

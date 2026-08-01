@@ -5,14 +5,25 @@
             <p>Kelola Modal Awal kas, buat daftar agenda/kegiatan, anggarkan Rencana Anggaran Biaya (RAB), dan monitoring sisa saldo kas.</p>
         </div>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            @if(!auth()->user()->isSuperadmin())
             <button type="button" class="btn-secondary" onclick="openModal('modal-edit-modal-awal')">
                 <i data-lucide="coins"></i> Atur Modal Awal
             </button>
+            @endif
             <button type="button" class="btn-primary" onclick="openModal('modal-add-lomba')">
                 <i data-lucide="plus"></i> Tambah Agenda & Anggaran
             </button>
         </div>
     </div>
+
+    @if(auth()->user()->isSuperadmin())
+    <div style="padding: 14px 18px; margin-bottom: 24px; border-radius: var(--radius-md); background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); display: flex; align-items: center; gap: 12px; color: var(--text-primary);">
+        <i data-lucide="shield-alert" style="width: 20px; color: #3b82f6; flex-shrink: 0;"></i>
+        <div style="font-size: 13px;">
+            <strong>Mode Pemantauan Superadmin:</strong> Anda sedang melihat data dalam mode pantau instansi (read-only). Superadmin tidak berhak mengedit modal awal, pemasukan, atau pengeluaran instansi.
+        </div>
+    </div>
+    @endif
 
     <!-- Summary Total Cards (Modal Awal, Pemasukan, Pengeluaran, Saldo Kas Aktif) -->
     <div class="stats-grid" style="margin-bottom: 24px;">
@@ -22,9 +33,11 @@
             <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">
                 Unit/Instansi: <strong>{{ $desa->nama_desa ?? 'Semua Unit / Desa' }}</strong>
             </div>
+            @if(!auth()->user()->isSuperadmin())
             <button type="button" onclick="openModal('modal-edit-modal-awal')" style="position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--primary-red); cursor: pointer;" title="Edit Modal Awal">
                 <i data-lucide="edit-3" style="width: 16px;"></i>
             </button>
+            @endif
         </div>
         <div class="stat-card glass">
             <span class="stat-label">(+) Total Pemasukan Kas</span>
@@ -193,6 +206,7 @@
         </div>
     </div>
 
+    @if(!auth()->user()->isSuperadmin())
     <!-- MODAL EDIT MODAL AWAL -->
     <div class="modal-overlay" id="modal-edit-modal-awal">
         <div class="modal-card">
@@ -208,16 +222,6 @@
                     <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;">
                         Modal awal adalah pagu kas awal/modal dasar operasional kegiatan yang menjadi patokan awal sebelum ditambah pemasukan dan dikurangi pengeluaran.
                     </p>
-                    @if(auth()->user() && auth()->user()->isSuperadmin())
-                    <div class="form-group">
-                        <label class="form-label">Pilih Unit / Instansi (Desa/Sekolah/Divisi)</label>
-                        <select name="desa_id" class="form-select" required>
-                            @foreach($desas as $ds)
-                                <option value="{{ $ds->id }}" {{ ($desa && $desa->id == $ds->id) ? 'selected' : '' }}>{{ $ds->nama_desa }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    @endif
                     <div class="form-group">
                         <label class="form-label">Nominal Modal Awal (Rp)</label>
                         <input type="number" name="modal_awal" class="form-input" required value="{{ (int) $modalAwal }}" placeholder="Contoh: 25000000">
@@ -230,6 +234,7 @@
             </form>
         </div>
     </div>
+    @endif
 
     <!-- MODAL TAMBAH LOMBA & ANGGARAN -->
     <div class="modal-overlay" id="modal-add-lomba">

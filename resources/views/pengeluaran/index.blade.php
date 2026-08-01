@@ -13,11 +13,22 @@
                 <i data-lucide="file-spreadsheet" style="width: 16px;"></i>
                 <span>Export Excel</span>
             </a>
+            @if(!auth()->user()->isSuperadmin())
             <button type="button" class="btn-primary" onclick="openModal('modal-add-pengeluaran')">
                 <i data-lucide="minus-circle"></i> Catat Pengeluaran
             </button>
+            @endif
         </div>
     </div>
+
+    @if(auth()->user()->isSuperadmin())
+    <div style="padding: 14px 18px; margin-bottom: 24px; border-radius: var(--radius-md); background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); display: flex; align-items: center; gap: 12px; color: var(--text-primary);">
+        <i data-lucide="shield-alert" style="width: 20px; color: #3b82f6; flex-shrink: 0;"></i>
+        <div style="font-size: 13px;">
+            <strong>Mode Pemantauan Superadmin:</strong> Anda sedang melihat data dalam mode pantau instansi (read-only). Superadmin tidak berhak mengedit atau mencatat transaksi pengeluaran.
+        </div>
+    </div>
+    @endif
 
     <!-- TABEL PENGELUARAN -->
     <div class="glass-panel" style="overflow: hidden;">
@@ -58,6 +69,7 @@
                             @endif
                         </td>
                         <td>
+                            @if(!auth()->user()->isSuperadmin())
                             <div style="display: flex; gap: 6px;">
                                 <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openModal('modal-edit-pengeluaran-{{ $trx->id }}')">
                                     <i data-lucide="edit" style="width:14px;"></i> Edit
@@ -70,9 +82,13 @@
                                     </button>
                                 </form>
                             </div>
+                            @else
+                            <span style="font-size: 11px; color: var(--text-secondary);">-</span>
+                            @endif
                         </td>
                     </tr>
 
+                    @if(!auth()->user()->isSuperadmin())
                     <!-- MODAL EDIT PENGELUARAN -->
                     <div class="modal-overlay" id="modal-edit-pengeluaran-{{ $trx->id }}">
                         <div class="modal-card">
@@ -89,39 +105,37 @@
                                     <div class="form-group">
                                         <label class="form-label">Kegiatan / Acara Tujuan</label>
                                         <select name="acara_id" class="form-select" required>
-                                            @foreach($acaras as $ac)
-                                                <option value="{{ $ac->id }}" {{ $trx->acara_id == $ac->id ? 'selected' : '' }}>
-                                                    {{ $ac->nama_acara }} ({{ $ac->desa->nama_desa ?? '-' }})
-                                                </option>
+                                            @foreach($acaras as $a)
+                                            <option value="{{ $a->id }}" {{ $trx->acara_id == $a->id ? 'selected' : '' }}>{{ $a->nama_acara }} ({{ $a->desa->nama_desa ?? '-' }})</option>
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label class="form-label">Nominal Pengeluaran (Rp)</label>
-                                        <input type="number" name="jumlah" class="form-input" required value="{{ (int) $trx->jumlah }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Tanggal Transaksi</label>
-                                        <input type="date" name="tanggal_transaksi" class="form-input" value="{{ \Carbon\Carbon::parse($trx->tanggal_transaksi)->format('Y-m-d') }}" required>
+                                        <label class="form-label">Tanggal Keluar</label>
+                                        <input type="date" name="tanggal_transaksi" class="form-input" required value="{{ \Carbon\Carbon::parse($trx->tanggal_transaksi)->format('Y-m-d') }}">
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Kategori Pengeluaran</label>
-                                        <select name="kategori" class="form-select">
-                                            <option value="Operasional / Hadiah" {{ $trx->kategori === 'Operasional / Hadiah' ? 'selected' : '' }}>Operasional / Hadiah</option>
-                                            <option value="Sewa Perlengkapan" {{ $trx->kategori === 'Sewa Perlengkapan' ? 'selected' : '' }}>Sewa Perlengkapan</option>
-                                            <option value="Konsumsi & Logistik" {{ $trx->kategori === 'Konsumsi & Logistik' ? 'selected' : '' }}>Konsumsi & Logistik</option>
-                                            <option value="Lainnya" {{ $trx->kategori === 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                                        <select name="kategori" class="form-select" required>
+                                            <option value="Operasional / Hadiah" {{ $trx->kategori == 'Operasional / Hadiah' ? 'selected' : '' }}>Operasional / Hadiah</option>
+                                            <option value="Sewa Alat & Tempat" {{ $trx->kategori == 'Sewa Alat & Tempat' ? 'selected' : '' }}>Sewa Alat & Tempat</option>
+                                            <option value="Konsumsi & Logistik" {{ $trx->kategori == 'Konsumsi & Logistik' ? 'selected' : '' }}>Konsumsi & Logistik</option>
+                                            <option value="Lainnya" {{ $trx->kategori == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label class="form-label">Keterangan Penggunaan</label>
+                                        <label class="form-label">Keterangan / Keperluan</label>
                                         <input type="text" name="keterangan" class="form-input" required value="{{ $trx->keterangan }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Nominal (Rp)</label>
+                                        <input type="number" name="jumlah" class="form-input" required value="{{ (int)$trx->jumlah }}">
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">Bukti Struk / Nota (Foto/Gambar)</label>
                                         <input type="file" name="bukti_file" accept="image/*" class="form-input">
                                         @if($trx->bukti_file)
-                                            <small style="color:var(--primary-red);display:block;margin-top:4px;">Nota saat ini tersedia: <a href="{{ asset('storage/' . $trx->bukti_file) }}" target="_blank" style="text-decoration:underline;">Lihat Gambar</a></small>
+                                            <small style="color:var(--success);display:block;margin-top:4px;">Nota saat ini tersedia: <a href="{{ asset('storage/' . $trx->bukti_file) }}" target="_blank" style="text-decoration:underline;">Lihat Gambar</a></small>
                                         @endif
                                     </div>
                                 </div>
@@ -132,6 +146,7 @@
                             </form>
                         </div>
                     </div>
+                    @endif
                     @empty
                     <tr>
                         <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-secondary);">
@@ -143,12 +158,13 @@
             </table>
         </div>
         @if($pengeluarans->hasPages())
-        <div style="padding: 16px;">
+        <div style="padding: 16px; border-top: 1px solid var(--glass-border);">
             {{ $pengeluarans->links() }}
         </div>
         @endif
     </div>
 
+    @if(!auth()->user()->isSuperadmin())
     <!-- MODAL TAMBAH PENGELUARAN -->
     <div class="modal-overlay" id="modal-add-pengeluaran">
         <div class="modal-card">
@@ -164,31 +180,31 @@
                     <div class="form-group">
                         <label class="form-label">Kegiatan / Acara Tujuan</label>
                         <select name="acara_id" class="form-select" required>
-                            @foreach($acaras as $ac)
-                                <option value="{{ $ac->id }}">{{ $ac->nama_acara }} ({{ $ac->desa->nama_desa ?? '-' }})</option>
+                            @foreach($acaras as $a)
+                            <option value="{{ $a->id }}">{{ $a->nama_acara }} ({{ $a->desa->nama_desa ?? '-' }})</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Nominal Pengeluaran (Rp)</label>
-                        <input type="number" name="jumlah" class="form-input" required placeholder="Contoh: 3500000">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Tanggal Transaksi</label>
-                        <input type="date" name="tanggal_transaksi" class="form-input" value="{{ date('Y-m-d') }}" required>
+                        <label class="form-label">Tanggal Keluar</label>
+                        <input type="date" name="tanggal_transaksi" class="form-input" required value="{{ date('Y-m-d') }}">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Kategori Pengeluaran</label>
-                        <select name="kategori" class="form-select">
+                        <select name="kategori" class="form-select" required>
                             <option value="Operasional / Hadiah">Operasional / Hadiah</option>
-                            <option value="Sewa Perlengkapan">Sewa Perlengkapan</option>
+                            <option value="Sewa Alat & Tempat">Sewa Alat & Tempat</option>
                             <option value="Konsumsi & Logistik">Konsumsi & Logistik</option>
                             <option value="Lainnya">Lainnya</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Keterangan Penggunaan</label>
-                        <input type="text" name="keterangan" class="form-input" required placeholder="Contoh: Pembelian hadiah juara 1, 2, 3">
+                        <label class="form-label">Keterangan / Keperluan</label>
+                        <input type="text" name="keterangan" class="form-input" required placeholder="Contoh: Sewa sound system acara">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nominal (Rp)</label>
+                        <input type="number" name="jumlah" class="form-input" required placeholder="Contoh: 1500000">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Bukti Struk / Nota (Foto/Gambar)</label>
@@ -203,4 +219,5 @@
             </form>
         </div>
     </div>
+    @endif
 </x-app-layout>
