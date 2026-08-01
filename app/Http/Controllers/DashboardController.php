@@ -66,26 +66,32 @@ class DashboardController extends Controller
 
         // Trend Chart Data (Line Chart Pemasukan vs Pengeluaran)
         $trendLabels = ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4', '17 Agustus', 'Pasca Event'];
-        $baseIn = max($totalPemasukan, 10000000);
-        $baseOut = max($totalPengeluaran, 5000000);
+        
+        if ($totalPemasukan == 0 && $totalPengeluaran == 0) {
+            $trendPemasukan = [0, 0, 0, 0, 0, 0];
+            $trendPengeluaran = [0, 0, 0, 0, 0, 0];
+        } else {
+            $baseIn = $totalPemasukan;
+            $baseOut = $totalPengeluaran;
 
-        $trendPemasukan = [
-            round(($baseIn * 0.12) / 1000000, 2),
-            round(($baseIn * 0.22) / 1000000, 2),
-            round(($baseIn * 0.35) / 1000000, 2),
-            round(($baseIn * 0.18) / 1000000, 2),
-            round(($baseIn * 0.10) / 1000000, 2),
-            round(($baseIn * 0.03) / 1000000, 2),
-        ];
+            $trendPemasukan = [
+                round(($baseIn * 0.12) / 1000000, 2),
+                round(($baseIn * 0.22) / 1000000, 2),
+                round(($baseIn * 0.35) / 1000000, 2),
+                round(($baseIn * 0.18) / 1000000, 2),
+                round(($baseIn * 0.10) / 1000000, 2),
+                round(($baseIn * 0.03) / 1000000, 2),
+            ];
 
-        $trendPengeluaran = [
-            round(($baseOut * 0.08) / 1000000, 2),
-            round(($baseOut * 0.18) / 1000000, 2),
-            round(($baseOut * 0.28) / 1000000, 2),
-            round(($baseOut * 0.26) / 1000000, 2),
-            round(($baseOut * 0.16) / 1000000, 2),
-            round(($baseOut * 0.04) / 1000000, 2),
-        ];
+            $trendPengeluaran = [
+                round(($baseOut * 0.08) / 1000000, 2),
+                round(($baseOut * 0.18) / 1000000, 2),
+                round(($baseOut * 0.28) / 1000000, 2),
+                round(($baseOut * 0.26) / 1000000, 2),
+                round(($baseOut * 0.16) / 1000000, 2),
+                round(($baseOut * 0.04) / 1000000, 2),
+            ];
+        }
 
         return view('dashboard', compact(
             'totalDesa',

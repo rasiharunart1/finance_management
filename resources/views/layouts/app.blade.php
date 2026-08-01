@@ -842,14 +842,6 @@
                 </div>
 
                 <div class="topbar-right">
-                    <!-- Simulasi Real-time Notif Trigger (Hanya Mode Local/Demo) -->
-                    @if(app()->isLocal())
-                    <button type="button" class="btn-sim-notif" onclick="triggerSimulatedNotif()">
-                        <i data-lucide="zap" style="width: 16px;"></i>
-                        <span>Simulasi Notifikasi Realtime</span>
-                    </button>
-                    @endif
-
                     <!-- Theme Toggle -->
                     <button type="button" class="icon-btn" onclick="toggleTheme()" title="Toggle Light/Dark Mode">
                         <i data-lucide="sun" id="themeIcon"></i>

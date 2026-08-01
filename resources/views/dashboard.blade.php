@@ -94,35 +94,10 @@
                     </div>
                 </div>
                 @empty
-                <div style="display: flex; gap: 16px; position: relative;">
-                    <div style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--surface-solid); box-shadow: var(--shadow-sm); z-index: 1; flex-shrink: 0;">
-                        <i data-lucide="check-circle" style="color:var(--success); width:20px;"></i>
-                    </div>
-                    <div>
-                        <div style="font-size: 14px; font-weight: 600;">PT. Indofood Lunas</div>
-                        <div style="font-size: 13px; color: var(--text-secondary); margin-top: 2px;">Pembayaran sponsor utama telah diterima.</div>
-                        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Hari ini, 10:30 WIB</div>
-                    </div>
-                </div>
-                <div style="display: flex; gap: 16px; position: relative;">
-                    <div style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--surface-solid); box-shadow: var(--shadow-sm); z-index: 1; flex-shrink: 0;">
-                        <i data-lucide="shopping-cart" style="color:var(--warning); width:20px;"></i>
-                    </div>
-                    <div>
-                        <div style="font-size: 14px; font-weight: 600;">Pembelian Hadiah Lomba</div>
-                        <div style="font-size: 13px; color: var(--text-secondary); margin-top: 2px;">Pengeluaran Rp 2.500.000 oleh Div. Acara</div>
-                        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Kemarin, 14:15 WIB</div>
-                    </div>
-                </div>
-                <div style="display: flex; gap: 16px; position: relative;">
-                    <div style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--surface-solid); box-shadow: var(--shadow-sm); z-index: 1; flex-shrink: 0;">
-                        <i data-lucide="file-text" style="color:var(--text-secondary); width:20px;"></i>
-                    </div>
-                    <div>
-                        <div style="font-size: 14px; font-weight: 600;">Proposal RT 03 Diupload</div>
-                        <div style="font-size: 13px; color: var(--text-secondary); margin-top: 2px;">Menunggu approval ketua panitia.</div>
-                        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">2 Ags 2026</div>
-                    </div>
+                <div style="text-align: center; padding: 32px 16px; color: var(--text-secondary);">
+                    <i data-lucide="inbox" style="width: 36px; height: 36px; margin: 0 auto; opacity: 0.4;"></i>
+                    <p style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin-top: 8px;">Belum Ada Aktivitas</p>
+                    <p style="font-size: 11px; opacity: 0.8; margin-top: 2px;">Semua aktivitas pencatatan kas dan progres lomba akan otomatis muncul di sini.</p>
                 </div>
                 @endforelse
             </div>
