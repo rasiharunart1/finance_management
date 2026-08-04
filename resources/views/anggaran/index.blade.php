@@ -71,12 +71,35 @@
                 <h3 style="font-size: 16px; font-weight: 700;">Daftar Agenda Kegiatan & Pagu Biaya (RAB)</h3>
                 <p style="font-size: 12px; color: var(--text-secondary);">Pantau anggaran rencana tiap kegiatan/agenda dan otomatis potong kas dari realisasi pengeluarannya.</p>
             </div>
-            <div style="font-size: 13px; font-weight: 600;">
-                Total Dianggarkan: <span style="color: var(--primary-red);">Rp {{ number_format($totalAnggaran, 0, ',', '.') }}</span>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="layout-toggle" style="display: flex; background: rgba(0,0,0,0.1); border-radius: 8px; padding: 4px;">
+                    <button type="button" class="btn-layout active" onclick="switchLayout('list')" id="btn-layout-list" style="border: none; background: var(--surface-solid); padding: 4px 8px; border-radius: 6px; color: var(--text-primary); cursor: pointer; box-shadow: var(--shadow-sm);" title="Tampilan List">
+                        <i data-lucide="list" style="width: 16px;"></i>
+                    </button>
+                    <button type="button" class="btn-layout" onclick="switchLayout('grid')" id="btn-layout-grid" style="border: none; background: transparent; padding: 4px 8px; border-radius: 6px; color: var(--text-secondary); cursor: pointer;" title="Tampilan Grid">
+                        <i data-lucide="layout-grid" style="width: 16px;"></i>
+                    </button>
+                </div>
+                <div style="font-size: 13px; font-weight: 600;">
+                    Total Dianggarkan: <span style="color: var(--primary-red);">Rp {{ number_format($totalAnggaran, 0, ',', '.') }}</span>
+                </div>
             </div>
         </div>
         
-        <div style="display: flex; flex-direction: column; gap: 20px;">
+        <style>
+            .rab-layout-list {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .rab-layout-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                gap: 20px;
+            }
+        </style>
+        
+        <div id="rab-container" class="rab-layout-list">
             @forelse($acaras as $a)
             @php
                 $serapan = $a->persentase_anggaran;
@@ -297,4 +320,47 @@
             </form>
         </div>
     </div>
+    
+    <script>
+        function switchLayout(layout) {
+            const container = document.getElementById('rab-container');
+            const btnList = document.getElementById('btn-layout-list');
+            const btnGrid = document.getElementById('btn-layout-grid');
+            
+            if (layout === 'grid') {
+                container.classList.remove('rab-layout-list');
+                container.classList.add('rab-layout-grid');
+                
+                btnList.style.background = 'transparent';
+                btnList.style.color = 'var(--text-secondary)';
+                btnList.style.boxShadow = 'none';
+                
+                btnGrid.style.background = 'var(--surface-solid)';
+                btnGrid.style.color = 'var(--text-primary)';
+                btnGrid.style.boxShadow = 'var(--shadow-sm)';
+                
+                localStorage.setItem('rab_layout_preference', 'grid');
+            } else {
+                container.classList.remove('rab-layout-grid');
+                container.classList.add('rab-layout-list');
+                
+                btnGrid.style.background = 'transparent';
+                btnGrid.style.color = 'var(--text-secondary)';
+                btnGrid.style.boxShadow = 'none';
+                
+                btnList.style.background = 'var(--surface-solid)';
+                btnList.style.color = 'var(--text-primary)';
+                btnList.style.boxShadow = 'var(--shadow-sm)';
+                
+                localStorage.setItem('rab_layout_preference', 'list');
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLayout = localStorage.getItem('rab_layout_preference');
+            if (savedLayout) {
+                switchLayout(savedLayout);
+            }
+        });
+    </script>
 </x-app-layout>

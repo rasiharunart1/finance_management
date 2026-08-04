@@ -203,6 +203,10 @@
                         <input type="text" name="keterangan" class="form-input" required placeholder="Contoh: PT. Indofood (Sponsorship Utama)">
                     </div>
                     <div class="form-group">
+                        <label class="form-label">Nominal (Rp)</label>
+                        <input type="number" name="jumlah" class="form-input" required placeholder="Contoh: 1500000">
+                    </div>
+                    <div class="form-group">
                         <label class="form-label">Bukti Struk / Kwitansi (Foto/Gambar)</label>
                         <input type="file" name="bukti_file" accept="image/*" class="form-input">
                         <small style="font-size:11px;color:var(--text-secondary);">Unggah foto bukti transfer atau kwitansi format JPG/PNG.</small>

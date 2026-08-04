@@ -564,9 +564,10 @@
         }
 
         /* Table Styles */
-        .table-container {
+        .table-container, .table-responsive {
             width: 100%;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         table {
@@ -813,20 +814,25 @@
                 <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     <i data-lucide="layout-dashboard"></i> <span class="menu-text">Dashboard</span>
                 </a>
+                @if(!auth()->user()->isAnggotaPanitia())
                 <a href="{{ route('acara.index') }}" class="nav-item {{ request()->routeIs('acara.*') || request()->routeIs('jadwal.*') ? 'active' : '' }}">
                     <i data-lucide="calendar-check"></i> <span class="menu-text">Data Event & Acara</span>
                 </a>
+                @endif
                 <a href="{{ route('panduan.index') }}" class="nav-item {{ request()->routeIs('panduan.*') ? 'active' : '' }}">
                     <i data-lucide="book-open"></i> <span class="menu-text">Panduan Manual</span>
                 </a>
+                @if(!auth()->user()->isAnggotaPanitia())
                 <a href="{{ route('struktur.index') }}" class="nav-item {{ request()->routeIs('struktur.*') ? 'active' : '' }}">
                     <i data-lucide="users"></i> <span class="menu-text">Struktur Panitia</span>
                 </a>
+                @endif
 
                 <div class="menu-group-title">Keuangan</div>
                 <a href="{{ route('anggaran.index') }}" class="nav-item {{ request()->routeIs('anggaran.*') ? 'active' : '' }}">
                     <i data-lucide="pie-chart"></i> <span class="menu-text">Anggaran (RAB)</span>
                 </a>
+                @if(!auth()->user()->isAnggotaPanitia())
                 <a href="{{ route('pemasukan.index') }}" class="nav-item {{ request()->routeIs('pemasukan.*') ? 'active' : '' }}">
                     <i data-lucide="arrow-down-circle"></i> <span class="menu-text">Pemasukan</span>
                 </a>
@@ -836,7 +842,9 @@
                 <a href="{{ route('keuangan.index') }}" class="nav-item {{ request()->routeIs('keuangan.*') ? 'active' : '' }}">
                     <i data-lucide="wallet"></i> <span class="menu-text">Buku Kas Semua</span>
                 </a>
+                @endif
 
+                @if(!auth()->user()->isAnggotaPanitia())
                 <div class="menu-group-title">Relasi & Aset</div>
                 <a href="{{ route('sponsor.index') }}" class="nav-item {{ request()->routeIs('sponsor.*') ? 'active' : '' }}">
                     <i data-lucide="handshake"></i> <span class="menu-text">Sponsor</span>
@@ -844,6 +852,7 @@
                 <a href="{{ route('dokumen.index') }}" class="nav-item {{ request()->routeIs('dokumen.*') ? 'active' : '' }}">
                     <i data-lucide="folder-open"></i> <span class="menu-text">Dokumen & Laporan</span>
                 </a>
+                @endif
 
                 @if(auth()->user() && auth()->user()->isSuperadmin())
                 <div class="menu-group-title">Superadmin</div>

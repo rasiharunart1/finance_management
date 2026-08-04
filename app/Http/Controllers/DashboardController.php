@@ -64,33 +64,46 @@ class DashboardController extends Controller
         $latestAcaras = (clone $acaraQuery)->with('desa')->latest()->take(6)->get();
         $latestActivities = ActivityLog::with('user')->latest()->take(6)->get();
 
-        // Trend Chart Data (Line Chart Pemasukan vs Pengeluaran)
-        $trendLabels = ['Tahap 1', 'Tahap 2', 'Tahap 3', 'Tahap 4', 'Hari-H Event', 'Pasca Event'];
+        // Trend Chart Data (Line Chart Pemasukan vs Pengeluaran) dinamis dari DB
+        $trendQuery = TransaksiKeuangan::selectRaw('DATE(tanggal_transaksi) as date, tipe, SUM(jumlah) as total');
+        if ($isBendahara) {
+             $trendQuery->whereHas('acara', function ($q) use ($desaId) {
+                 $q->where('desa_id', $desaId);
+             });
+        }
+        $trendData = $trendQuery->groupBy('date', 'tipe')
+                               ->orderBy('date', 'asc')
+                               ->get();
+
+        $dates = [];
+        $pemasukanMap = [];
+        $pengeluaranMap = [];
         
-        if ($totalPemasukan == 0 && $totalPengeluaran == 0) {
-            $trendPemasukan = [0, 0, 0, 0, 0, 0];
-            $trendPengeluaran = [0, 0, 0, 0, 0, 0];
-        } else {
-            $baseIn = $totalPemasukan;
-            $baseOut = $totalPengeluaran;
+        foreach ($trendData as $row) {
+            $dates[] = $row->date;
+            if ($row->tipe === 'pemasukan') {
+                $pemasukanMap[$row->date] = $row->total;
+            } else {
+                $pengeluaranMap[$row->date] = $row->total;
+            }
+        }
+        $dates = array_unique($dates);
+        sort($dates);
+        
+        $trendLabels = [];
+        $trendPemasukan = [];
+        $trendPengeluaran = [];
+        
+        foreach ($dates as $date) {
+            $trendLabels[] = \Carbon\Carbon::parse($date)->translatedFormat('d M Y');
+            $trendPemasukan[] = round((isset($pemasukanMap[$date]) ? $pemasukanMap[$date] : 0) / 1000000, 2);
+            $trendPengeluaran[] = round((isset($pengeluaranMap[$date]) ? $pengeluaranMap[$date] : 0) / 1000000, 2);
+        }
 
-            $trendPemasukan = [
-                round(($baseIn * 0.12) / 1000000, 2),
-                round(($baseIn * 0.22) / 1000000, 2),
-                round(($baseIn * 0.35) / 1000000, 2),
-                round(($baseIn * 0.18) / 1000000, 2),
-                round(($baseIn * 0.10) / 1000000, 2),
-                round(($baseIn * 0.03) / 1000000, 2),
-            ];
-
-            $trendPengeluaran = [
-                round(($baseOut * 0.08) / 1000000, 2),
-                round(($baseOut * 0.18) / 1000000, 2),
-                round(($baseOut * 0.28) / 1000000, 2),
-                round(($baseOut * 0.26) / 1000000, 2),
-                round(($baseOut * 0.16) / 1000000, 2),
-                round(($baseOut * 0.04) / 1000000, 2),
-            ];
+        if(empty($trendLabels)) {
+             $trendLabels = [date('d M Y')];
+             $trendPemasukan = [0];
+             $trendPengeluaran = [0];
         }
 
         return view('dashboard', compact(

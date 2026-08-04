@@ -43,8 +43,8 @@
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->phone ?? '-' }}</td>
                         <td>
-                            <span class="badge {{ $user->role === 'superadmin' ? 'danger' : 'success' }}">
-                                {{ $user->role === 'superadmin' ? 'Superadmin (All Desa)' : 'Admin Bendahara' }}
+                            <span class="badge {{ $user->role === 'superadmin' ? 'danger' : ($user->role === 'anggota_panitia' ? 'warning' : 'success') }}">
+                                {{ $user->role === 'superadmin' ? 'Superadmin (All Desa)' : ($user->role === 'anggota_panitia' ? 'Anggota Panitia' : 'Admin Bendahara') }}
                             </span>
                         </td>
                         <td>
@@ -126,6 +126,7 @@
                         <select name="role" class="form-select" id="add_role" required onchange="toggleDesaSelect('add_role', 'add_desa_group')">
                             <option value="admin_bendahara">Admin Bendahara (Has One Desa)</option>
                             <option value="superadmin">Superadmin (Has Many Desa)</option>
+                            <option value="anggota_panitia">Anggota Panitia (View RAB Only)</option>
                         </select>
                     </div>
                     <div class="form-group" id="add_desa_group">
@@ -180,6 +181,7 @@
                         <select name="role" id="edit_role" class="form-select" required onchange="toggleDesaSelect('edit_role', 'edit_desa_group')">
                             <option value="superadmin">Superadmin (Has Many Desa)</option>
                             <option value="admin_bendahara">Admin Bendahara (Has One Desa)</option>
+                            <option value="anggota_panitia">Anggota Panitia (View RAB Only)</option>
                         </select>
                     </div>
                     <div class="form-group" id="edit_desa_group">

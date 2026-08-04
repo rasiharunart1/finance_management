@@ -1,176 +1,537 @@
-# Product Requirements Document (PRD)
-## Sistem Manajemen Acara, Desa & Keuangan Bendahara (NH-Finance)
+# PRD.md
 
-**Dokumen Versi:** 1.0.0  
-**Tanggal:** 31 Juli 2026  
-**Status:** Approved  
-**Platform:** Web Application (Laravel 11 + Laravel Breeze)
+# ERP Bendahara Event Desa
 
----
-
-## 1. Executive Summary
-
-**NH-Finance** (Nusantara Horizon Finance) adalah sistem informasi manajemen terintegrasi berbasis web yang dirancang khusus untuk mengelola data administratif **Desa**, agenda **Acara (Event)**, serta transparansi **Keuangan Acara oleh Bendahara (Admin)**. Sistem ini dilengkapi dengan sistem autentikasi modern (**Laravel Breeze**), manajemen hak akses peran pengguna (**Superadmin** & **Admin/Bendahara**), sistem notifikasi **realtime interaktif**, serta visualisasi data analitik dalam antarmuka yang estetis dan profesional.
+**Versi:** 1.0.0
+**Status:** MVP
+**Platform:** Web Application
+**Framework:** Laravel 12
+**Database:** PostgreSQL / MySQL
 
 ---
 
-## 2. Target Pengguna & Roles (Matriks Hak Akses)
+# 1. Latar Belakang
 
-Sistem ini mendukung 2 (dua) peran utama dengan pembagian tugas yang jelas:
+Pelaksanaan kegiatan HUT Kemerdekaan RI tingkat desa melibatkan banyak transaksi keuangan, sponsor, inventaris, dan administrasi yang umumnya masih dilakukan menggunakan buku tulis atau spreadsheet.
 
-| Fitur / Modul | Superadmin (`superadmin`) | Admin / Bendahara (`admin_bendahara`) |
-| :--- | :---: | :---: |
-| **Login & Autentikasi (Breeze)** | ✅ Ya | ✅ Ya |
-| **Dashboard Statistik & Visualisasi Chart** | ✅ Ya (Semua Data) | ✅ Ya (Fokus Anggaran & Acara) |
-| **CRUD Nama Desa** | ✅ Full CRUD | 👁️ Read Only / View |
-| **CRUD Nama Acara** | ✅ Full CRUD | ✅ Full CRUD (Mengelola Acara & Rencana Anggaran) |
-| **Modul Keuangan Bendahara (Kas Acara)** | ✅ View / Approve / Full | ✅ Full CRUD (Catat Pemasukan/Pengeluaran) |
-| **Manajemen Pengguna & Role** | ✅ Full CRUD | ❌ Tidak Ada Akses |
-| **Notifikasi Realtime (Pusat Notifikasi)** | ✅ Menerima semua notifikasi | ✅ Menerima notifikasi terkait acara/keuangan |
-| **Export / Laporan PDF & Excel** | ✅ Ya | ✅ Ya (Laporan Keuangan & Acara) |
+Akibatnya sering terjadi:
 
----
+* Kesalahan pencatatan
+* Bukti transaksi tercecer
+* Sulit mengetahui saldo kas secara real-time
+* Penyusunan LPJ memakan waktu lama
+* Kurangnya transparansi kepada panitia dan masyarakat
 
-## 3. Arsitektur Sistem & Teknologi
-
-* **Backend Framework:** Laravel 11 / PHP 8.3
-* **Authentication:** Laravel Breeze (Blade + Alpine.js + Tailwind CSS / Vanilla CSS custom tokens)
-* **Database:** SQLite (Default untuk eksekusi cepat zero-configuration) / MySQL 8+ Compatible
-* **Realtime Engine:** Laravel Notification System + Database Broadcast Channels + Frontend Reactive Polling / Event-driven UI (Top Navbar Badge Counter & Interactive Toast Popup)
-* **Frontend Components:** 
-  * Responsive Glassmorphic Cards & Accent Gradients
-  * Interactive Modal Dialogs untuk proses CRUD tanpa reload halaman
-  * Chart.js / SVG Dynamic Rendering untuk visualisasi data
+ERP Bendahara Event Desa dibangun untuk mendigitalisasi seluruh proses administrasi dan keuangan dalam satu sistem yang mudah digunakan.
 
 ---
 
-## 4. Entity Relationship Diagram (ERD) & Skema Database
+# 2. Tujuan
 
-```mermaid
-erDiagram
-    USERS {
-        id BIGINT PK
-        name VARCHAR(255)
-        email VARCHAR(255)
-        phone VARCHAR(50)
-        role ENUM("superadmin", "admin_bendahara")
-        avatar VARCHAR(255)
-        is_active BOOLEAN
-        created_at TIMESTAMP
-    }
-    DESAS {
-        id BIGINT PK
-        kode_desa VARCHAR(50)
-        nama_desa VARCHAR(255)
-        kecamatan VARCHAR(255)
-        kepala_desa VARCHAR(255)
-        kontak VARCHAR(50)
-        populasi INT
-        status ENUM("aktif", "nonaktif")
-        catatan TEXT
-        created_at TIMESTAMP
-    }
-    ACARAS {
-        id BIGINT PK
-        desa_id BIGINT FK
-        user_id BIGINT FK
-        nama_acara VARCHAR(255)
-        deskripsi TEXT
-        lokasi VARCHAR(255)
-        tanggal_mulai DATETIME
-        tanggal_selesai DATETIME
-        anggaran_rencana DECIMAL(15,2)
-        status ENUM("planned", "ongoing", "completed", "cancelled")
-        created_at TIMESTAMP
-    }
-    TRANSAKSI_KEUANGANS {
-        id BIGINT PK
-        acara_id BIGINT FK
-        user_id BIGINT FK
-        nomor_transaksi VARCHAR(50)
-        tipe ENUM("pemasukan", "pengeluaran")
-        kategori VARCHAR(100)
-        jumlah DECIMAL(15,2)
-        tanggal_transaksi DATE
-        keterangan TEXT
-        bukti_file VARCHAR(255)
-        created_at TIMESTAMP
-    }
-    NOTIFICATIONS {
-        id CHAR(36) PK
-        type VARCHAR(255)
-        notifiable_type VARCHAR(255)
-        notifiable_id BIGINT
-        data TEXT
-        read_at TIMESTAMP
-        created_at TIMESTAMP
-    }
-    ACTIVITY_LOGS {
-        id BIGINT PK
-        user_id BIGINT FK
-        action VARCHAR(255)
-        description TEXT
-        ip_address VARCHAR(45)
-        created_at TIMESTAMP
-    }
-
-    DESAS ||--o{ ACARAS : "memiliki"
-    USERS ||--o{ ACARAS : "mengelola"
-    ACARAS ||--o{ TRANSAKSI_KEUANGANS : "mencatat arus kas"
-    USERS ||--o{ TRANSAKSI_KEUANGANS : "menginput"
-    USERS ||--o{ ACTIVITY_LOGS : "melakukan"
-```
+* Mengelola keuangan event secara terpusat
+* Mempermudah bendahara dalam pencatatan transaksi
+* Mempermudah penyusunan laporan
+* Menyediakan transparansi keuangan
+* Mengurangi kesalahan pencatatan manual
 
 ---
 
-## 5. Spesifikasi Fungsional & Modul
+# 3. Target Pengguna
 
-### 5.1. Modul Autentikasi & Keamanan (Breeze Auth + Role Middleware)
-* Halaman Login dan Profil Pengguna berbasis **Laravel Breeze**.
-* Proteksi rute menggunakan custom middleware `RoleMiddleware` (`role:superadmin` dan `role:superadmin,admin_bendahara`).
-* Reset password dan pembaruan informasi profil akun.
-
-### 5.2. Modul CRUD Nama Desa (Village Management)
-* **Daftar Desa:** Menampilkan tabel data desa lengkap dengan pencarian cepat (Live Search) berdasarkan nama desa, kode desa, atau kecamatan.
-* **Tambah Desa:** Input nama desa, kode unik, penanggung jawab/kepala desa, kontak, serta status aktif/nonaktif.
-* **Edit & Hapus Desa:** Modifikasi data desa serta perlindungan integritas agar desa yang memiliki acara aktif tidak dapat dihapus secara sembarangan.
-
-### 5.3. Modul CRUD Nama Acara (Event Management)
-* **Daftar Acara:** Menampilkan seluruh agenda acara yang dihubungkan ke desa tertentu.
-* **Filter & Pencarian:** Filter berdasarkan Desa, Rentang Tanggal, dan Status Acara (`Planned`, `Ongoing`, `Completed`, `Cancelled`).
-* **Alokasi Anggaran:** Penentuan anggaran rencana (`anggaran_rencana`) untuk pemantauan oleh Bendahara.
-* **Modal Interaktif:** Form tambah dan edit acara berbasis modal responsif dengan validasi waktu mulai/selesai.
-
-### 5.4. Modul Keuangan Bendahara (Treasury Improvisation)
-* **Buku Kas Acara:** Pencatatan setiap transaksi **Pemasukan** dan **Pengeluaran** yang dikaitkan langsung dengan Acara dan Desa.
-* **Perhitungan Saldo Otomatis:** Sistem secara otomatis menghitung:
-  $$\text{Saldo Akhir} = \sum \text{Pemasukan} - \sum \text{Pengeluaran}$$
-* **Indikator Kinerja Anggaran:** Membandingkan total pengeluaran dengan `anggaran_rencana` acara (menampilkan alert warna hijau jika aman, kuning jika mendekati batas, dan merah jika overbudget).
-* **Ekspor Laporan:** Ringkasan laporan keuangan dalam format cetak (Print/PDF-ready table).
-
-### 5.5. Modul Notifikasi Realtime (Notification Center)
-* **Top Navbar Notification Bell:**
-  * Menampilkan *badge counter* merah bernomor untuk notifikasi yang belum dibaca (`unread count`).
-  * Dropdown interaktif daftar notifikasi terbaru (misalnya: *"Desa Sukamaju baru saja ditambahkan"*, *"Acara 'Pesta Rakyat 2026' dibuat dengan anggaran Rp 50.000.000"*, *"Transaksi Pengeluaran baru dicatat oleh Bendahara"*).
-* **Interactive Toast Alerts:** Pop-up visual di pojok kanan atas yang muncul secara instan saat aktivitas CRUD terjadi.
-* **Aksi Cepat:** Tombol *"Tandai semua telah dibaca"* (`Mark all as read`).
+* Ketua Panitia
+* Wakil Ketua
+* Bendahara
+* Sekretaris
+* Divisi Acara
+* Divisi Perlengkapan
+* Divisi Konsumsi
+* Divisi Humas
+* Divisi Dokumentasi
+* Auditor Internal
 
 ---
 
-## 6. Standar Desain Antarmuka (UI/UX Guidelines)
+# 4. Ruang Lingkup MVP
 
-* **Palet Warna Utama:**
-  * **Primary (Emerald/Navy):** `#0f172a` (Slate Dark), `#10b981` (Emerald Accent untuk Kas/Keuangan).
-  * **Secondary:** `#3b82f6` (Blue untuk Acara/Aktivitas), `#f59e0b` (Amber untuk Peringatan).
-* **Tipografi:** Sans-serif modern (Inter / Outfit / system-ui).
-* **Responsivitas:** Desain 100% responsif dengan sidebar yang dapat dilipat (*collapsible*) untuk tampilan seluler maupun desktop lebar.
-* **Micro-interactions:** Efek transisi halus pada hover kartu statistik, pembukaan modal, dan animasi badge notifikasi.
+Sistem hanya digunakan untuk **satu event**.
+
+Contoh:
+
+> HUT Kemerdekaan RI Desa Sukamaju Tahun 2026
+
+Belum mendukung:
+
+* Multi Event
+* Multi Organisasi
+* SaaS
+* Multi Tenant
+
+Namun struktur aplikasi harus mudah dikembangkan ke arah tersebut.
 
 ---
 
-## 7. Kriteria Penerimaan (Acceptance Criteria)
+# 5. Role User
 
-1. **Pengguna Superadmin** dapat melakukan operasi CRUD untuk Desa, Acara, Keuangan, serta mengelola akun pengguna.
-2. **Pengguna Admin (Bendahara)** dapat masuk menggunakan kredensialnya dan mencatat arus kas acara serta memperbarui status acara tanpa akses ke manajemen user.
-3. **Pusat Notifikasi** memperbarui indikator angka belum dibaca secara langsung saat aksi baru dieksekusi.
-4. **Dasbor Statistik** menyajikan total desa, total acara, serta ringkasan kas yang akurat dan estetis.
+## Administrator
+
+Hak akses penuh terhadap seluruh sistem.
+
+---
+
+## Ketua Panitia
+
+Dapat melihat seluruh data dan melakukan approval transaksi.
+
+---
+
+## Bendahara
+
+Mengelola:
+
+* Kas
+* Pemasukan
+* Pengeluaran
+* Sponsor
+* Donatur
+* Vendor
+* Laporan
+
+---
+
+## Sekretaris
+
+Mengelola:
+
+* Proposal
+* Surat
+* Dokumen
+* Jadwal
+* Notulen
+
+---
+
+## Divisi
+
+Setiap divisi hanya dapat mengakses data yang berkaitan dengan tugasnya.
+
+---
+
+# 6. Modul Sistem
+
+## Dashboard
+
+Menampilkan:
+
+* Saldo Kas
+* Total Pemasukan
+* Total Pengeluaran
+* Budget Tersisa
+* Sponsor Aktif
+* Donatur
+* Vendor
+* Jumlah Lomba
+* Aktivitas Terbaru
+
+---
+
+## Struktur Panitia
+
+Data:
+
+* Nama
+* Jabatan
+* Nomor HP
+* Divisi
+* Status
+
+---
+
+## Anggaran (RAB)
+
+Fitur:
+
+* Membuat anggaran
+* Mengubah anggaran
+* Monitoring realisasi
+* Persentase penggunaan budget
+
+Field:
+
+* Nama Item
+* Kategori
+* Budget
+* Realisasi
+* Selisih
+
+---
+
+## Pemasukan
+
+Kategori:
+
+* Sponsor
+* Donasi
+* Kas Desa
+* Penjualan Kupon
+* Bazaar
+* Tiket
+
+Field:
+
+* Tanggal
+* Nominal
+* Kategori
+* Metode Pembayaran
+* Bukti
+* Keterangan
+
+---
+
+## Pengeluaran
+
+Kategori:
+
+* Konsumsi
+* Hadiah
+* Banner
+* Dekorasi
+* Sound System
+* Transportasi
+* Honor
+* Dokumentasi
+
+Field:
+
+* Vendor
+* Nominal
+* Bukti
+* Approval
+* Status
+
+---
+
+## Sponsor
+
+Data:
+
+* Nama
+* Perusahaan
+* Kontak
+* Nominal
+* Status
+
+Status:
+
+* Prospek
+* Negosiasi
+* Deal
+* Lunas
+
+---
+
+## Donatur
+
+Data:
+
+* Nama
+* Nominal
+* Tanggal
+* Metode Pembayaran
+
+---
+
+## Vendor
+
+Data:
+
+* Nama Vendor
+* Kategori
+* Kontak
+* Alamat
+
+---
+
+## Inventaris
+
+Data:
+
+* Nama Barang
+* Jumlah
+* Kondisi
+* Lokasi
+* Keterangan
+
+Status:
+
+* Baik
+* Dipinjam
+* Rusak
+* Hilang
+
+---
+
+## Jadwal
+
+Menampilkan timeline kegiatan:
+
+* Persiapan
+* Technical Meeting
+* Lomba
+* Pentas Seni
+* Pembagian Hadiah
+
+---
+
+## Dokumen
+
+Upload:
+
+* Proposal
+* Surat
+* LPJ
+* Invoice
+* Kwitansi
+* Dokumentasi
+
+---
+
+## Surat
+
+Generate otomatis:
+
+* Surat Sponsor
+* Surat Permohonan Dana
+* Surat Peminjaman
+* Surat Tugas
+
+Export PDF.
+
+---
+
+## Laporan
+
+Jenis laporan:
+
+* Buku Kas
+* Cash Flow
+* Pemasukan
+* Pengeluaran
+* Sponsor
+* Donatur
+* Budget vs Realisasi
+
+Export:
+
+* PDF
+* Excel
+
+---
+
+# 7. Workflow
+
+## Pemasukan
+
+Input Data
+
+↓
+
+Verifikasi
+
+↓
+
+Masuk Buku Kas
+
+↓
+
+Laporan
+
+---
+
+## Pengeluaran
+
+Pengajuan
+
+↓
+
+Approval Ketua
+
+↓
+
+Pembayaran
+
+↓
+
+Masuk Buku Kas
+
+↓
+
+Laporan
+
+---
+
+# 8. Dashboard
+
+Widget:
+
+* Total Saldo
+* Cash Flow
+* Pengeluaran Hari Ini
+* Sponsor Aktif
+* Donatur Terbaru
+* Progress Budget
+* Aktivitas Terbaru
+
+---
+
+# 9. Hak Akses
+
+Gunakan **Spatie Laravel Permission**.
+
+Permission dasar:
+
+* View
+* Create
+* Update
+* Delete
+* Approve
+* Export
+* Print
+
+---
+
+# 10. Non Functional Requirement
+
+## Performance
+
+* Halaman < 2 detik
+* Mendukung minimal 50 pengguna aktif
+* Pagination pada seluruh tabel
+
+---
+
+## Security
+
+* Authentication Laravel
+* CSRF Protection
+* Password Hashing
+* Audit Log aktivitas
+* Role Based Access Control (RBAC)
+
+---
+
+## Backup
+
+* Backup database manual
+* Export seluruh data ke Excel
+
+---
+
+## Responsive
+
+Harus berjalan baik pada:
+
+* Desktop
+* Tablet
+* Smartphone
+
+---
+
+# 11. Teknologi
+
+Backend
+
+* Laravel 12
+* PHP 8.4
+
+Frontend
+
+* Blade
+* Tailwind CSS
+* Alpine.js
+
+Database
+
+* PostgreSQL atau MySQL
+
+Authentication
+
+* Laravel Breeze
+
+Permission
+
+* Spatie Laravel Permission
+
+Storage
+
+* Laravel Storage
+
+PDF
+
+* DomPDF
+
+Excel
+
+* Laravel Excel
+
+---
+
+# 12. Struktur Menu
+
+Dashboard
+
+Anggaran (RAB)
+
+Keuangan
+
+* Pemasukan
+* Pengeluaran
+* Buku Kas
+
+Sponsor
+
+Donatur
+
+Vendor
+
+Inventaris
+
+Struktur Panitia
+
+Jadwal
+
+Dokumen
+
+Surat
+
+Laporan
+
+Pengaturan
+
+---
+
+# 13. Future Roadmap
+
+Versi berikutnya akan mendukung:
+
+* Multi Event
+* Multi Organisasi
+* Portal Transparansi Publik
+* QRIS Donasi
+* QR Code Absensi Panitia
+* WhatsApp Notification
+* Digital Signature
+* Mobile Application
+* SaaS Multi-Tenant
+
+---
+
+# 14. Definisi Selesai (Definition of Done)
+
+Produk dianggap siap digunakan apabila:
+
+* Semua modul MVP berjalan dengan baik.
+* Hak akses sesuai peran pengguna.
+* Seluruh transaksi tercatat pada Buku Kas.
+* Laporan dapat diekspor ke PDF dan Excel.
+* Tampilan responsif pada desktop dan perangkat mobile.
+* Tidak terdapat bug kritis pada alur utama (pemasukan, pengeluaran, anggaran, dan pelaporan).

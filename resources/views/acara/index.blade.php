@@ -21,7 +21,7 @@
                     @endforeach
                 </select>
             </div>
-            <div style="width: 200px;">
+            <div style="width: 150px;">
                 <select name="status" class="form-select" onchange="this.form.submit()">
                     <option value="">-- Semua Status --</option>
                     <option value="planned" {{ $status == 'planned' ? 'selected' : '' }}>Planned</option>
@@ -30,7 +30,14 @@
                     <option value="cancelled" {{ $status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                 </select>
             </div>
-            @if($desaId || $status || $search)
+            <div style="width: 140px;">
+                <input type="date" name="start_date" class="form-input" value="{{ $startDate ?? '' }}" onchange="this.form.submit()" title="Tanggal Awal">
+            </div>
+            <span style="color: var(--text-muted); font-weight: 500;">s/d</span>
+            <div style="width: 140px;">
+                <input type="date" name="end_date" class="form-input" value="{{ $endDate ?? '' }}" onchange="this.form.submit()" title="Tanggal Akhir">
+            </div>
+            @if($desaId || $status || $search || !empty($startDate) || !empty($endDate))
                 <a href="{{ route('acara.index') }}" class="btn-outline" style="padding: 0.65rem 1rem; font-size: 0.8rem;">
                     <i class="fa-solid fa-xmark"></i>
                     <span>Reset Filter</span>

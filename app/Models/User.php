@@ -52,6 +52,11 @@ class User extends Authenticatable
         return $this->role === 'admin_bendahara';
     }
 
+    public function isAnggotaPanitia(): bool
+    {
+        return $this->role === 'anggota_panitia';
+    }
+
     public function acaras()
     {
         return $this->hasMany(Acara::class);

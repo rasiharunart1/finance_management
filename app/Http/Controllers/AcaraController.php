@@ -17,6 +17,8 @@ class AcaraController extends Controller
         $search = $request->query('search');
         $desaId = $request->query('desa_id');
         $status = $request->query('status');
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
         $user = auth()->user();
 
         $query = Acara::with(['desa', 'user', 'transaksis'])
@@ -29,6 +31,12 @@ class AcaraController extends Controller
             })
             ->when($status, function ($query, $status) {
                 return $query->where('status', $status);
+            })
+            ->when($startDate, function ($query, $startDate) {
+                return $query->whereDate('tanggal_mulai', '>=', $startDate);
+            })
+            ->when($endDate, function ($query, $endDate) {
+                return $query->whereDate('tanggal_mulai', '<=', $endDate);
             });
 
         if ($user && $user->isBendahara() && $user->desa_id) {
@@ -40,7 +48,7 @@ class AcaraController extends Controller
 
         $acaras = $query->latest()->paginate(10)->withQueryString();
 
-        return view('acara.index', compact('acaras', 'desas', 'search', 'desaId', 'status'));
+        return view('acara.index', compact('acaras', 'desas', 'search', 'desaId', 'status', 'startDate', 'endDate'));
     }
 
     public function store(Request $request)
